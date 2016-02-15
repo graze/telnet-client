@@ -40,7 +40,7 @@ class TelnetResponse implements TelnetResponseInterface
      */
     public function __construct($isError, $responseText, array $promptMatches)
     {
-        $this->isError = $isError;
+        $this->isError = (bool) $isError;
         $this->responseText = $responseText;
         $this->promptMatches = $promptMatches;
     }
