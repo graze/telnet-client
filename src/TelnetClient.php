@@ -209,8 +209,7 @@ class TelnetClient implements TelnetClientInterface
      */
     public static function build($dsn, $prompt = null, $promptError = null, $lineEnding = null)
     {
-        $telnetClientBuilder = new TelnetClientBuilder();
-        return $telnetClientBuilder->build($dsn, $prompt, $promptError, $lineEnding);
+        return TelnetClientBuilder::build($dsn, $prompt, $promptError, $lineEnding);
     }
 
     public function __destruct()

@@ -8,6 +8,7 @@ use Socket\Raw\Socket;
 use Graze\TelnetClient\PromptMatcher;
 use Graze\TelnetClient\InterpretAsCommand;
 use Graze\TelnetClient\TelnetClientBuilder;
+use Graze\TelnetClient\TelnetClient;
 use Graze\TelnetClient\TelnetClientInterface;
 
 class TelnetClientBuilderTest extends \PHPUnit_Framework_TestCase
@@ -21,7 +22,7 @@ class TelnetClientBuilderTest extends \PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    public function testBuild($prompt, $promptError, $lineEnding)
+    public function testBuildClient($prompt, $promptError, $lineEnding)
     {
         $dsn = 'localhost:80';
         $socket = m::mock(Socket::class);
@@ -35,7 +36,7 @@ class TelnetClientBuilderTest extends \PHPUnit_Framework_TestCase
         $promptMatcher = new PromptMatcher();
         $interpretAsCommand = new InterpretAsCommand();
 
-        $telnetClient = m::mock(TelnetClientInterface::class)
+        $telnetClient = m::mock(TelnetClient::class)
             ->shouldReceive('setSocket')
             ->with($socket)
             ->once()
@@ -81,24 +82,13 @@ class TelnetClientBuilderTest extends \PHPUnit_Framework_TestCase
 
         $telnetClient = $telnetClient->getMock();
 
-        $clientBuilder = m::mock(TelnetClientBuilder::class)
-            ->shouldReceive('getSocketFactory')
-            ->andReturn($socketFactory)
-            ->once()
-            ->shouldReceive('getPromptMatcher')
-            ->andReturn($promptMatcher)
-            ->once()
-            ->shouldReceive('getInterpretAsCommand')
-            ->andReturn($interpretAsCommand)
-            ->once()
-            ->shouldReceive('getTelnetClient')
-            ->andReturn($telnetClient)
-            ->once()
-            ->getMock()
+        $clientBuilder = m::mock(
+            TelnetClientBuilder::class,
+            [$socketFactory, $promptMatcher, $interpretAsCommand, $telnetClient]
+        )
             ->makePartial();
 
-        $client = $clientBuilder->build($dsn, $prompt, $promptError, $lineEnding);
-
+        $client = $clientBuilder->buildClient($dsn, $prompt, $promptError, $lineEnding);
         $this->assertInstanceOf(TelnetClientInterface::class, $client);
     }
 
