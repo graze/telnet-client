@@ -214,6 +214,10 @@ class TelnetClient implements TelnetClientInterface
 
     public function __destruct()
     {
+        if (!$this->socket) {
+            return;
+        }
+
         $this->socket->close();
     }
 }
