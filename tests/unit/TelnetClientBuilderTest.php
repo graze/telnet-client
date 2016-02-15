@@ -22,7 +22,7 @@ class TelnetClientBuilderTest extends \PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    public function testBuildClient($prompt, $promptError, $lineEnding)
+    public function testBuildClient($prompt = null, $promptError = null, $lineEnding = null)
     {
         $dsn = 'localhost:80';
         $socket = m::mock(Socket::class);

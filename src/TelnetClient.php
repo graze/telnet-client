@@ -159,17 +159,18 @@ class TelnetClient implements TelnetClientInterface
     /**
      * @param string $prompt
      *
-     * @return Graze\TelnetClient\TelnetClientResponseInterface
+     * @return Graze\TelnetClient\TelnetResponseInterface
      */
     protected function getResponse($prompt = null)
     {
+        $isError = false;
         $buffer = '';
         do {
             // process one character at a time (RFC 854 states 8-bit ASCII characters)
             $character = $this->socket->read(1);
 
             if (in_array($character, [$this->NULL, $this->DC1])) {
-                return $buffer;
+                break;
             }
 
             if ($this->interpretAsCommand->interpret($character, $this->socket)) {
@@ -180,7 +181,6 @@ class TelnetClient implements TelnetClientInterface
 
             // check for prompt
             if ($this->promptMatcher->isMatch($prompt ?: $this->prompt, $buffer, $this->lineEnding)) {
-                $isError = false;
                 break;
             }
 
