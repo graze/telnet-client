@@ -33,13 +33,13 @@ The `execute` method returns a `TelnetResponse` object:
 
 ```php
 /* @return bool */
-$resp->getIsError(); // whether an error prompt was encountered
+$resp->isError(); // whether an error prompt was encountered
 
 /* @return string */
 $resp->getResponseText(); // any response from the server up until a prompt is encountered
 
 /* @return array */
-$resp->promptMatches(); // an array containing the portion of the server's response that caused `execute` to return
+$resp->promptMatches(); // array containing the portion of the server's response that caused execute to return
 ```
 
 `responseText` and `promptMatches` are trimmed of line endings.
