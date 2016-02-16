@@ -1,0 +1,18 @@
+# .scrutinizer.yml
+build:
+    environment:
+        php: '5.5.25'
+
+checks:
+    php:
+        custom_coding_standard:
+            ruleset_path: 'vendor/graze/standards/PHP/CodeSniffer/Graze/ruleset.xml'
+
+before_commands:
+    - 'composer install --dev --prefer-source'
+
+tools:
+    external_code_coverage: true
+    php_mess_detector: true
+    php_code_sniffer: true
+    sensiolabs_security_checker: true
