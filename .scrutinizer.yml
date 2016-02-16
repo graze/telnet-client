@@ -1,7 +1,8 @@
 # .scrutinizer.yml
 build:
     dependencies:
-        before: 'composer install --dev --prefer-source'
+        before:
+            - 'composer install --dev --prefer-source'
     environment:
         php: '5.5.25'
 
