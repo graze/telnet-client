@@ -2,13 +2,13 @@
 
 All Notable changes to `telnet-client` will be documented in this file
 
-## [Version] - YYYY-MM-DD
+## v1.0.0 - 2016-02-16
 
 ### Added
-- Nothing
+- Everything
 
 ### Changed
-- Nothing
+- Everything
 
 ### Fixed
 - Nothing
