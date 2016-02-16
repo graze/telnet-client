@@ -44,8 +44,7 @@
     ],
     "require": {
         "php": ">5.5.0",
-        "clue/socket-raw": "^1.2",
-        "graze/standards": "^1.0"
+        "clue/socket-raw": "^1.2"
     },
     "require-dev": {
         "phpunit/phpunit" : "4.*",
