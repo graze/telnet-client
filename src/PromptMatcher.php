@@ -50,7 +50,7 @@ class PromptMatcher
 
         $responseText = preg_replace_callback($pattern, $callback, $subject);
 
-        if (!$matches) {
+        if (empty($matches)) {
             return false;
         }
 
