@@ -1,5 +1,7 @@
 # .scrutinizer.yml
 build:
+    dependencies:
+        before: 'composer install --dev --prefer-source'
     environment:
         php: '5.5.25'
 
@@ -7,9 +9,6 @@ checks:
     php:
         custom_coding_standard:
             ruleset_path: 'vendor/graze/standards/PHP/CodeSniffer/Graze/ruleset.xml'
-
-before_commands:
-    - 'composer install --dev --prefer-source'
 
 tools:
     external_code_coverage: true
