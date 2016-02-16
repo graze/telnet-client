@@ -13,5 +13,5 @@ checks:
 tools:
     external_code_coverage: true
     php_mess_detector: true
-    php_code_sniffer: true
+    php_code_sniffer: false
     sensiolabs_security_checker: true
