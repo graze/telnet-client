@@ -18,8 +18,8 @@ $ composer require graze/telnet-client
 ```
 
 ## Usage
-The `build` method will return a `TelnetClient` instance with an open socket to the remote sever identified by `$dsn`.
-The `execute` method can then be used to write `$command` to the socket. Once a command is sent, the socket is read until a line ending is encountered, immediately preceeded by either a prompt or an error prompt.
+Use the `build` method to return a `TelnetClientInterface` instance. This will hold an open socket to the remote sever identified by `$dsn`.
+The `execute` method can then be used to write `$command` to the socket. Once a command is sent, the socket is read until a specific sequence is encountered. This would be line ending immediately preceeded by either a prompt or an error prompt.
 
 ### Basic usage
 ``` php
@@ -29,17 +29,29 @@ $command = 'Open the pod bay doors, HAL';
 $resp = $client->execute($command);
 ```
 
-The `execute` method returns a `TelnetResponse` object:
+The `execute` method returns a `TelnetResponseInterface` object:
 
 ```php
-/* @return bool */
-$resp->isError(); // whether an error prompt was encountered
+/**
+ * Whether an error prompt was encountered.
+ *
+ * @return bool
+ */
+public function isError();
 
-/* @return string */
-$resp->getResponseText(); // any response from the server up until a prompt is encountered
+/**
+ * Any response from the server up until a prompt is encountered.
+ *
+ * @return string
+ */
+public function getResponseText();
 
-/* @return array */
-$resp->promptMatches(); // array containing the portion of the server's response that caused execute to return
+/**
+ * The portion of the server's response that caused execute() to return.
+ *
+ * @return array
+ */
+public function getPromptMatches();
 ```
 
 `responseText` and `promptMatches` are trimmed of line endings.

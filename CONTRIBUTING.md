@@ -2,7 +2,7 @@
 
 Contributions are **welcome**!
 
-We accept contributions via Pull Requests on [Github](https://github.com/graze/telnet-client). We also recommend reading [How to write the perfect Pull Request](https://github.com/blog/1943-how-to-write-the-perfect-pull-request) which has some great tips and advice.
+We accept contributions via Pull Requests on [Github](https://github.com/graze/:package-name). We also recommend reading [How to write the perfect Pull Request](https://github.com/blog/1943-how-to-write-the-perfect-pull-request) which has some great tips and advice.
 
 ## Reporting an Issue
 
@@ -42,11 +42,29 @@ Or run individual suites using:
 
 ```shell
 $ make test-unit
+$ make test-functional
 ```
 
-You can get a coverage report in text and HTML by running:
+You can get a coverage report in text:
 
 ```shell
 $ make test-coverage
 $ make test-unit-coverage
+$ make test-functional-coverage
+```
+
+An HTML coverage report can be written to `tests/report` using:
+
+```shell
+$ make test-coverage-html
+$ make test-unit-coverage-html
+$ make test-functional-coverage-html
+```
+
+For a coverage report in clover XML format use:
+
+```shell
+$ make test-coverage-clover
+$ make test-unit-coverage-clover
+$ make test-functional-coverage-clover
 ```

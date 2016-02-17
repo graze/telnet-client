@@ -17,16 +17,22 @@ namespace Graze\TelnetClient;
 interface TelnetResponseInterface
 {
     /**
+     * Whether an error prompt was encountered.
+     *
      * @return bool
      */
     public function isError();
 
     /**
+     * Any response from the server up until a prompt is encountered.
+     *
      * @return string
      */
     public function getResponseText();
 
     /**
+     * The portion of the server's response that caused execute() to return.
+     *
      * @return array
      */
     public function getPromptMatches();
