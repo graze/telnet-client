@@ -3,15 +3,8 @@ build:
     environment:
         php: '5.5.25'
 
-checks:
-    php:
-        custom_coding_standard:
-            git_repository: 'https://github.com/graze/standards'
-            git_version: 'ff7ea57e14cc222ff2c29f36a0bf40e707783bbb'
-            ruleset_path: 'PHP/CodeSniffer/Graze/ruleset.xml'
-
 tools:
     external_code_coverage: true
     php_mess_detector: true
-    php_code_sniffer: false
+    php_code_sniffer: true
     sensiolabs_security_checker: true
