@@ -1,7 +1,7 @@
 # telnet-client
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/graze/telnet-client.svg?style=flat-square)](https://packagist.org/packages/graze/telnet-client)
-[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
 [![Build Status](https://img.shields.io/travis/graze/telnet-client/master.svg?style=flat-square)](https://travis-ci.org/graze/telnet-client)
 [![Coverage Status](https://img.shields.io/scrutinizer/coverage/g/graze/telnet-client.svg?style=flat-square)](https://scrutinizer-ci.com/g/graze/telnet-client/code-structure)
 [![Quality Score](https://img.shields.io/scrutinizer/g/graze/telnet-client.svg?style=flat-square)](https://scrutinizer-ci.com/g/graze/telnet-client)
