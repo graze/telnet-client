@@ -18,18 +18,30 @@ $ composer require graze/telnet-client
 ```
 
 ## Usage
-Use the `build` method to return a `TelnetClientInterface` instance. This will hold an open socket to the remote sever identified by `$dsn`.
-The `execute` method can then be used to write `$command` to the socket. Once a command is sent, the socket is read until a specific sequence is encountered. This would be line ending immediately preceeded by either a prompt or an error prompt.
 
-### Basic usage
+### Instantiating a client
+
+Use the `build` method to return a `TelnetClientInterface` instance. This will hold an open socket to the remote sever identified by `$dsn`.
 ``` php
 $dsn = '127.0.0.1:23';
 $client = Graze\TelnetClient\TelnetClient::build($dsn);
-$command = 'Open the pod bay doors, HAL';
-$resp = $client->execute($command);
+...
 ```
 
-The `execute` method returns a `TelnetResponseInterface` object:
+### Issuing commands
+
+With the client instantiated, the `execute` method can be used to write `$command` to the socket:
+
+``` php
+...
+$command = 'Open the pod bay doors, HAL';
+$resp = $client->execute($command);
+...
+```
+
+### Responses
+Once a command has been sent, the socket is read until a specific sequence is encountered. This is a line ending immediately preceeded by either a prompt or an error prompt.
+At this point the `execute` method returns a `TelnetResponseInterface` object:
 
 ```php
 /**
@@ -54,8 +66,6 @@ public function getResponseText();
 public function getPromptMatches();
 ```
 
-`responseText` and `promptMatches` are trimmed of line endings.
-
 A success response object might look like:
 
 ![screen shot 2016-02-15 at 15 36 39](https://cloud.githubusercontent.com/assets/1314694/13053030/315e5952-d3fa-11e5-8d13-a61ccb135a49.png)
@@ -64,6 +74,7 @@ Or if the server responded with an error:
 
 ![screen shot 2016-02-15 at 15 37 55](https://cloud.githubusercontent.com/assets/1314694/13053054/400869ac-d3fa-11e5-8bc2-2c0335eaecde.png)
 
+**Note:** `responseText` and `promptMatches` are trimmed of line endings.
 ### Client configuration
 The client uses the following defaults:
 * standard prompt `$`
@@ -117,6 +128,7 @@ which gives us:
 
 ![screen shot 2016-02-15 at 15 57 29](https://cloud.githubusercontent.com/assets/1314694/13053525/e04e8656-d3fc-11e5-873a-0d5df92701ae.png)
 
+**Note:** it's important to escape any characters in your regex that may have special meaning when interpreted by [preg_match](http://php.net/manual/en/function.preg-match.php).
 ### Socket settings
 For timouts and more, PHP's `socket_set_option` is exposed via
 ```php
