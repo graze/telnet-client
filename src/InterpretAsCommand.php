@@ -39,6 +39,11 @@ class InterpretAsCommand
      */
     protected $DONT;
 
+    /**
+     * @var string
+     */
+    protected $IAC;
+
     public function __construct()
     {
         $this->WILL = chr(251);

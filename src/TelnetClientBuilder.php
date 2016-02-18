@@ -76,15 +76,15 @@ class TelnetClientBuilder
         $this->telnetClient->setPromptMatcher($this->promptMatcher);
         $this->telnetClient->setInterpretAsCommand($this->interpretAsCommand);
 
-        if ($prompt) {
+        if ($prompt !== null) {
             $this->telnetClient->setPrompt($prompt);
         }
 
-        if ($promptError) {
+        if ($promptError !== null) {
             $this->telnetClient->setPromptError($promptError);
         }
 
-        if ($lineEnding) {
+        if ($lineEnding !== null) {
             $this->telnetClient->setLineEnding($lineEnding);
         }
 

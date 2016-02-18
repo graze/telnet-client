@@ -47,7 +47,7 @@ class TelnetClientBuilderTest extends \PHPUnit_Framework_TestCase
             ->with($interpretAsCommand)
             ->once();
 
-        if ($prompt) {
+        if ($prompt !== null) {
             $telnetClient
                 ->shouldReceive('setPrompt')
                 ->with($prompt)
@@ -58,7 +58,7 @@ class TelnetClientBuilderTest extends \PHPUnit_Framework_TestCase
                 ->never();
         }
 
-        if ($promptError) {
+        if ($promptError !== null) {
             $telnetClient
                 ->shouldReceive('setPromptError')
                 ->with($promptError)
@@ -69,7 +69,7 @@ class TelnetClientBuilderTest extends \PHPUnit_Framework_TestCase
                 ->never();
         }
 
-        if ($lineEnding) {
+        if ($lineEnding !== null) {
             $telnetClient
                 ->shouldReceive('setLineEnding')
                 ->with($lineEnding)

@@ -66,15 +66,15 @@ class TelnetClientTest extends \PHPUnit_Framework_TestCase
         $telnetClient->setPromptMatcher($promptMatcher);
         $telnetClient->setInterpretAsCommand($interpretAsCommand);
 
-        if ($promptGlobal) {
+        if ($promptGlobal !== null) {
             $telnetClient->setPrompt($promptGlobal);
         }
 
-        if ($promptError) {
+        if ($promptError !== null) {
             $telnetClient->setPromptError($promptError);
         }
 
-        if ($lineEnding) {
+        if ($lineEnding !== null) {
             $telnetClient->setLineEnding($lineEnding);
         }
 
