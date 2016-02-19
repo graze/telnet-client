@@ -138,7 +138,7 @@ class TelnetClient implements TelnetClientInterface
      * @param string $command
      * @param string $prompt
      *
-     * @return Graze\TelnetClient\TelnetResponseInterface
+     * @return \Graze\TelnetClient\TelnetResponseInterface
      */
     public function execute($command, $prompt = null)
     {
@@ -159,7 +159,7 @@ class TelnetClient implements TelnetClientInterface
     /**
      * @param string $prompt
      *
-     * @return Graze\TelnetClient\TelnetResponseInterface
+     * @return \Graze\TelnetClient\TelnetResponseInterface
      */
     protected function getResponse($prompt = null)
     {
@@ -205,7 +205,7 @@ class TelnetClient implements TelnetClientInterface
      * @param string $promptError
      * @param string $lineEnding
      *
-     * @return Graze\TelnetClient\TelnetClientInterface
+     * @return \Graze\TelnetClient\TelnetClientInterface
      */
     public static function build($dsn, $prompt = null, $promptError = null, $lineEnding = null)
     {
