@@ -20,7 +20,7 @@ interface TelnetClientInterface
      * @param string $command
      * @param string $prompt
      *
-     * @return \Graze\TelnetClient\TelnetClientResponseInterface
+     * @return \Graze\TelnetClient\TelnetResponseInterface
      */
     public function execute($command, $prompt);
 }
