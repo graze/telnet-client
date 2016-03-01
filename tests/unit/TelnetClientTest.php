@@ -4,6 +4,7 @@ namespace Graze\TelnetClient\Test\Unit;
 
 use Mockery as m;
 use Socket\Raw\Socket;
+use Socket\Raw\Factory as SocketFactory;
 use Graze\TelnetClient\PromptMatcher;
 use Graze\TelnetClient\InterpretAsCommand;
 use Graze\TelnetClient\TelnetClient;
@@ -11,6 +12,81 @@ use Graze\TelnetClient\TelnetResponseInterface;
 
 class TelnetClientTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @dataProvider dataProviderConnect
+     *
+     * @param string $prompt
+     * @param string $promptError
+     * @param string $lineEnding
+     *
+     * @return void
+     */
+    public function testConnect($prompt = null, $promptError = null, $lineEnding = null)
+    {
+        $dsn = 'localhost:80';
+        $socket = m::mock(Socket::class);
+        $socketFactory = m::mock(SocketFactory::class)
+            ->shouldReceive('createClient')
+            ->with($dsn)
+            ->andReturn($socket)
+            ->once()
+            ->getMock();
+
+        $telnetClient = m::mock(
+            TelnetClient::class,
+            [$socketFactory, m::mock(PromptMatcher::class), m::mock(InterpretAsCommand::class)]
+        )
+            ->shouldReceive('setSocket')
+            ->with($socket)
+            ->once();
+
+        if ($prompt !== null) {
+            $telnetClient
+                ->shouldReceive('setPrompt')
+                ->with($prompt)
+                ->once();
+        } else {
+            $telnetClient
+                ->shouldReceive('setPrompt')
+                ->never();
+        }
+
+        if ($promptError !== null) {
+            $telnetClient
+                ->shouldReceive('setPromptError')
+                ->with($promptError)
+                ->once();
+        } else {
+            $telnetClient
+                ->shouldReceive('setPromptError')
+                ->never();
+        }
+
+        if ($lineEnding !== null) {
+            $telnetClient
+                ->shouldReceive('setLineEnding')
+                ->with($lineEnding)
+                ->once();
+        } else {
+            $telnetClient
+                ->shouldReceive('setLineEnding')
+                ->never();
+        }
+
+        $telnetClient = $telnetClient->getMock()->makePartial();
+        $telnetClient->connect($dsn, $prompt, $promptError, $lineEnding);
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderConnect()
+    {
+        return [
+            ['PROMPT', 'PROMPTERROR', 'LINENDING'],
+            [null, null, null]
+        ];
+    }
     /**
      * @dataProvider dataProviderExecute
      *
@@ -53,6 +129,12 @@ class TelnetClientTest extends \PHPUnit_Framework_TestCase
             ->once()
             ->getMock();
 
+        $socketFactory = m::mock(SocketFactory::class)
+            ->shouldReceive('createClient')
+            ->andReturn($socket)
+            ->once()
+            ->getMock();
+
         $promptMatcher = new PromptMatcher();
 
         $interpretAsCommand = m::mock(InterpretAsCommand::class)
@@ -61,22 +143,8 @@ class TelnetClientTest extends \PHPUnit_Framework_TestCase
             ->andReturn(false)
             ->getMock();
 
-        $telnetClient = new TelnetClient();
-        $telnetClient->setSocket($socket);
-        $telnetClient->setPromptMatcher($promptMatcher);
-        $telnetClient->setInterpretAsCommand($interpretAsCommand);
-
-        if ($promptGlobal !== null) {
-            $telnetClient->setPrompt($promptGlobal);
-        }
-
-        if ($promptError !== null) {
-            $telnetClient->setPromptError($promptError);
-        }
-
-        if ($lineEnding !== null) {
-            $telnetClient->setLineEnding($lineEnding);
-        }
+        $telnetClient = new TelnetClient($socketFactory, $promptMatcher, $interpretAsCommand);
+        $telnetClient->connect('127.0.0.1:23', $promptGlobal, $promptError, $lineEnding);
 
         $response = $telnetClient->execute($command, $promptLocal);
         $this->assertInstanceOf(TelnetResponseInterface::class, $response);
