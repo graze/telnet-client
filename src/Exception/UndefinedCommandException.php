@@ -16,8 +16,9 @@ namespace Graze\TelnetClient\Exception;
 
 use \Exception;
 use \OutOfBoundsException;
+use \Graze\TelnetClient\Exception\TelentExceptionInterface;
 
-class UndefinedCommandException extends OutOfBoundsException
+class UndefinedCommandException extends OutOfBoundsException implements TelentExceptionInterface
 {
     /**
      * @var string
