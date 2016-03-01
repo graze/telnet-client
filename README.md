@@ -21,16 +21,25 @@ $ composer require graze/telnet-client
 
 ### Instantiating a client
 
-Use the `build` method to return a `TelnetClientInterface` instance. This will hold an open socket to the remote sever identified by `$dsn`.
+Use the `factory` method to return a `TelnetClientInterface` instance:
+
 ``` php
-$dsn = '127.0.0.1:23';
-$client = Graze\TelnetClient\TelnetClient::build($dsn);
+$client = Graze\TelnetClient\TelnetClient::factory();
 ...
 ```
 
 ### Issuing commands
 
-With the client instantiated, the `execute` method can be used to write `$command` to the socket:
+Connect to the remote endpoint using the `connect` method:
+
+```php
+...
+$dsn = '127.0.0.1:23';
+$client->connect($dsn);
+...
+```
+
+Once connected, the `execute` method can be used to write `$command` to the socket:
 
 ``` php
 ...
@@ -81,13 +90,14 @@ The client uses the following defaults:
 * error prompt `ERROR`
 * line endings `\n`
 
-Custom configuration can be passed to the `build` method like so:
+Custom configuration can be passed to the `connect` method like so:
 ``` php
+...
 $dsn = '127.0.0.1:23';
 $prompt = 'OK';
 $promptError = 'ERR';
 $lineEnding = "\r\n";
-$client = Graze\TelnetClient\TelnetClient::build($dsn, $prompt, $promptError, $lineEnding);
+$client->connect($dsn, $prompt, $promptError, $lineEnding);
 ...
 ```
 
@@ -105,9 +115,10 @@ Some operations may respond with a more complex prompt. These instances can be h
 For instance, a server may respond with `ERROR n` (where n is an integer) when an error condition is encountered. The client could be configured as such:
 
 ``` php
+...
 $dsn = '127.0.0.1:23';
 $promptError = 'ERROR [0-9]';
-$client = Graze\TelnetClient\TelnetClient::build($dsn, null, $promptError);
+$client->connect($dsn, null, $promptError);
 ...
 ```
 
@@ -120,7 +131,7 @@ We can take the regex one further by using a [named capturing group](http://www.
 ```php
 $dsn = '127.0.0.1:23';
 $promptError = 'ERROR (?<errorNum>[0-9])';
-$client = Graze\TelnetClient\TelnetClient::build($dsn, null, $promptError);
+$client->connect($dsn, null, $promptError);
 ...
 ```
 
