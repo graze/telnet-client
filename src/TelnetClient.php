@@ -20,6 +20,8 @@ use \Graze\TelnetClient\InterpretAsCommand;
 use \Socket\Raw\Socket;
 use \Socket\Raw\Factory as SocketFactory;
 use \Graze\TelnetClient\TelnetClientBuilder;
+use \Exception;
+use \Graze\TelnetClient\Exception\TelnetException;
 
 class TelnetClient implements TelnetClientInterface
 {
@@ -116,7 +118,14 @@ class TelnetClient implements TelnetClientInterface
             $this->setLineEnding($lineEnding);
         }
 
-        $this->setSocket($this->socketFactory->createClient($dsn));
+        try {
+            $socket = $this->socketFactory->createClient($dsn);
+        }
+        catch (Exception $e) {
+            throw new TelnetException(sprintf('unable to create socket connection to [%s]', $dsn), 0, $e);
+        }
+
+        $this->setSocket($socket);
     }
 
     /**
@@ -159,6 +168,10 @@ class TelnetClient implements TelnetClientInterface
      */
     public function execute($command, $prompt = null)
     {
+        if (!$this->socket) {
+            throw new TelnetException('attempt to execute without a connection - call connect first');
+        }
+
         $this->write($command);
         return $this->getResponse($prompt);
     }
@@ -170,7 +183,12 @@ class TelnetClient implements TelnetClientInterface
      */
     protected function write($command)
     {
-        $this->socket->write($command . $this->lineEnding);
+        try {
+            $this->socket->write($command . $this->lineEnding);
+        }
+        catch (Exception $e) {
+            throw new TelnetException(sprintf('failed writing to socket [%s]', $command), 0, $e);
+        }
     }
 
     /**
@@ -183,8 +201,13 @@ class TelnetClient implements TelnetClientInterface
         $isError = false;
         $buffer = '';
         do {
-            // process one character at a time (RFC 854 states 8-bit ASCII characters)
-            $character = $this->socket->read(1);
+            // process one character at a time
+            try {
+                $character = $this->socket->read(1);
+            }
+            catch (Exception $e) {
+                throw new TelnetException('failed reading from socket', 0, $e);
+            }
 
             if (in_array($character, [$this->NULL, $this->DC1])) {
                 break;

@@ -14,7 +14,10 @@
 
 namespace Graze\TelnetClient\Exception;
 
-interface TelentExceptionInterface
+use \RuntimeException;
+use \Graze\TelnetClient\Exception\TelnetExceptionInterface;
+
+class TelnetException extends RuntimeException implements TelnetExceptionInterface
 {
 
 }
