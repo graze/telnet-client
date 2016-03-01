@@ -14,12 +14,12 @@
 
 namespace Graze\TelnetClient;
 
-use Graze\TelnetClient\TelnetClientInterface;
-use Graze\TelnetClient\PromptMatcher;
-use Graze\TelnetClient\InterpretAsCommand;
-use Socket\Raw\Socket;
-use Socket\Raw\Factory as SocketFactory;
-use Graze\TelnetClient\TelnetClientBuilder;
+use \Graze\TelnetClient\TelnetClientInterface;
+use \Graze\TelnetClient\PromptMatcher;
+use \Graze\TelnetClient\InterpretAsCommand;
+use \Socket\Raw\Socket;
+use \Socket\Raw\Factory as SocketFactory;
+use \Graze\TelnetClient\TelnetClientBuilder;
 
 class TelnetClient implements TelnetClientInterface
 {
