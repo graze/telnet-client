@@ -162,6 +162,14 @@ class TelnetClient implements TelnetClientInterface
     }
 
     /**
+     * @return \Socket\Raw\Socket
+     */
+    public function getSocket()
+    {
+        return $this->socket;
+    }
+
+    /**
      * @param string $command
      * @param string $prompt
      *
