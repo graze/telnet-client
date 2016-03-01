@@ -14,18 +14,19 @@
 
 namespace Graze\TelnetClient;
 
-use Graze\TelnetClient\TelnetClientInterface;
-use Graze\TelnetClient\PromptMatcher;
-use Graze\TelnetClient\InterpretAsCommand;
-use Socket\Raw\Socket;
-use Graze\TelnetClient\TelnetClientBuilder;
+use \Graze\TelnetClient\TelnetClientInterface;
+use \Graze\TelnetClient\PromptMatcher;
+use \Graze\TelnetClient\InterpretAsCommand;
+use \Socket\Raw\Socket;
+use \Socket\Raw\Factory as SocketFactory;
+use \Graze\TelnetClient\TelnetClientBuilder;
 
 class TelnetClient implements TelnetClientInterface
 {
     /**
-     * @var Socket
+     * @var SocketFactory
      */
-    protected $socket;
+    protected $socketFactory;
 
     /**
      * @var PromptMatcher
@@ -53,6 +54,11 @@ class TelnetClient implements TelnetClientInterface
     protected $lineEnding = "\n";
 
     /**
+     * @var Socket
+     */
+    protected $socket;
+
+    /**
      * @var string
      */
     protected $buffer;
@@ -72,42 +78,45 @@ class TelnetClient implements TelnetClientInterface
      */
     protected $IAC;
 
-    public function __construct()
-    {
+    /**
+     * @param SocketFactory $socketFactory
+     * @param PromptMatcher $promptMatcher
+     * @param InterpretAsCommand $interpretAsCommand
+     */
+    public function __construct(
+        SocketFactory $socketFactory,
+        PromptMatcher $promptMatcher,
+        InterpretAsCommand $interpretAsCommand
+    ) {
+        $this->socketFactory = $socketFactory;
+        $this->promptMatcher = $promptMatcher;
+        $this->interpretAsCommand = $interpretAsCommand;
+
         $this->NULL = chr(0);
         $this->DC1 = chr(17);
     }
 
     /**
-     * @param Socket $socket
+     * @param string $dsn
+     * @param string $prompt
+     * @param string $promptError
+     * @param string $lineEnding
      */
-    public function setSocket(Socket $socket)
+    public function connect($dsn, $prompt = null, $promptError = null, $lineEnding = null)
     {
-        $this->socket = $socket;
-    }
+        if ($prompt !== null) {
+            $this->setPrompt($prompt);
+        }
 
-    /**
-     * @return Socket
-     */
-    public function getSocket()
-    {
-        return $this->socket;
-    }
+        if ($promptError !== null) {
+            $this->setPromptError($promptError);
+        }
 
-    /**
-     * @param PromptMatcher $promptMatcher
-     */
-    public function setPromptMatcher(PromptMatcher $promptMatcher)
-    {
-        $this->promptMatcher = $promptMatcher;
-    }
+        if ($lineEnding !== null) {
+            $this->setLineEnding($lineEnding);
+        }
 
-    /**
-     * @param InterpretAsCommand $interpretAsCommand
-     */
-    public function setInterpretAsCommand(InterpretAsCommand $interpretAsCommand)
-    {
-        $this->interpretAsCommand = $interpretAsCommand;
+        $this->setSocket($this->socketFactory->createClient($dsn));
     }
 
     /**
@@ -132,6 +141,14 @@ class TelnetClient implements TelnetClientInterface
     public function setLineEnding($lineEnding)
     {
         $this->lineEnding = $lineEnding;
+    }
+
+    /**
+     * @param Socket $socket
+     */
+    public function setSocket(Socket $socket)
+    {
+        $this->socket = $socket;
     }
 
     /**
@@ -199,17 +216,17 @@ class TelnetClient implements TelnetClientInterface
         );
     }
 
+
     /**
-     * @param string $dsn
-     * @param string $prompt
-     * @param string $promptError
-     * @param string $lineEnding
-     *
-     * @return \Graze\TelnetClient\TelnetClientInterface
+     * @return TelnetClientInterface
      */
-    public static function build($dsn, $prompt = null, $promptError = null, $lineEnding = null)
+    public static function factory()
     {
-        return TelnetClientBuilder::build($dsn, $prompt, $promptError, $lineEnding);
+        new static(
+            new SocketFactory(),
+            new PromptMatcher(),
+            new InterpretAsCommand()
+        );
     }
 
     public function __destruct()

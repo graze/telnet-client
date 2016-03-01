@@ -14,8 +14,8 @@
 
 namespace Graze\TelnetClient;
 
-use Socket\Raw\Socket;
-use Graze\TelnetClient\Exception\UndefinedCommandException;
+use \Socket\Raw\Socket;
+use \Graze\TelnetClient\Exception\UndefinedCommandException;
 
 class InterpretAsCommand
 {

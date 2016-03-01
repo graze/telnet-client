@@ -17,6 +17,14 @@ namespace Graze\TelnetClient;
 interface TelnetClientInterface
 {
     /**
+     * @param string $dsn
+     * @param string $prompt
+     * @param string $promptError
+     * @param string $lineEnding
+     */
+    public function connect($dsn, $prompt = null, $promptError = null, $lineEnding = null);
+
+    /**
      * @param string $command
      * @param string $prompt
      *
