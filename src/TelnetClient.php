@@ -103,6 +103,8 @@ class TelnetClient implements TelnetClientInterface
      * @param string $prompt
      * @param string $promptError
      * @param string $lineEnding
+     *
+     * @throws TelnetExceptionInterface
      */
     public function connect($dsn, $prompt = null, $promptError = null, $lineEnding = null)
     {
@@ -120,8 +122,7 @@ class TelnetClient implements TelnetClientInterface
 
         try {
             $socket = $this->socketFactory->createClient($dsn);
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             throw new TelnetException(sprintf('unable to create socket connection to [%s]', $dsn), 0, $e);
         }
 
@@ -180,13 +181,13 @@ class TelnetClient implements TelnetClientInterface
      * @param string $command
      *
      * @return void
+     * @throws TelnetExceptionInterface
      */
     protected function write($command)
     {
         try {
             $this->socket->write($command . $this->lineEnding);
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             throw new TelnetException(sprintf('failed writing to socket [%s]', $command), 0, $e);
         }
     }
@@ -195,6 +196,7 @@ class TelnetClient implements TelnetClientInterface
      * @param string $prompt
      *
      * @return \Graze\TelnetClient\TelnetResponseInterface
+     * @throws TelnetExceptionInterface
      */
     protected function getResponse($prompt = null)
     {
@@ -204,8 +206,7 @@ class TelnetClient implements TelnetClientInterface
             // process one character at a time
             try {
                 $character = $this->socket->read(1);
-            }
-            catch (Exception $e) {
+            } catch (Exception $e) {
                 throw new TelnetException('failed reading from socket', 0, $e);
             }
 
@@ -238,7 +239,6 @@ class TelnetClient implements TelnetClientInterface
             $this->promptMatcher->getMatches()
         );
     }
-
 
     /**
      * @return TelnetClientInterface

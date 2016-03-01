@@ -60,7 +60,7 @@ class InterpretAsCommand
      * @param Socket $socket
      *
      * @return bool
-     * @throws UndefinedCommandException
+     * @throws TelnetExceptionInterface
      */
     public function interpret($character, Socket $socket)
     {
@@ -81,8 +81,7 @@ class InterpretAsCommand
                 $socket->write($this->IAC . $this->DONT . $option);
                 return true;
             }
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             throw new TelnetException('failed negotiating IAC', 0, $e);
         }
 
