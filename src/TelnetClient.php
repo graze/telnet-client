@@ -245,7 +245,7 @@ class TelnetClient implements TelnetClientInterface
      */
     public static function factory()
     {
-        new static(
+        return new static(
             new SocketFactory(),
             new PromptMatcher(),
             new InterpretAsCommand()

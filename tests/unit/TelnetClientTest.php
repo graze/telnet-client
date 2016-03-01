@@ -211,4 +211,10 @@ class TelnetClientTest extends \PHPUnit_Framework_TestCase
         $client->setSocket($socket);
         $client->execute('aCommand');
     }
+
+    public function testFactory()
+    {
+        $client = TelnetClient::factory();
+        $this->assertInstanceOf(TelnetClient::class, $client);
+    }
 }
