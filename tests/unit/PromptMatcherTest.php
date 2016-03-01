@@ -2,7 +2,7 @@
 
 namespace Graze\TelnetClient\Test\Unit;
 
-use Graze\TelnetClient\PromptMatcher;
+use \Graze\TelnetClient\PromptMatcher;
 
 class PromptMatcherTest extends \PHPUnit_Framework_TestCase
 {

@@ -2,13 +2,14 @@
 
 namespace Graze\TelnetClient\Test\Unit;
 
-use Mockery as m;
-use Socket\Raw\Socket;
-use Socket\Raw\Factory as SocketFactory;
-use Graze\TelnetClient\PromptMatcher;
-use Graze\TelnetClient\InterpretAsCommand;
-use Graze\TelnetClient\TelnetClient;
-use Graze\TelnetClient\TelnetResponseInterface;
+use \Mockery as m;
+use \Socket\Raw\Socket;
+use \Socket\Raw\Factory as SocketFactory;
+use \Graze\TelnetClient\PromptMatcher;
+use \Graze\TelnetClient\InterpretAsCommand;
+use \Graze\TelnetClient\TelnetClient;
+use \Graze\TelnetClient\TelnetResponseInterface;
+use \Graze\TelnetClient\Exception\TelnetExceptionInterface;
 
 class TelnetClientTest extends \PHPUnit_Framework_TestCase
 {
@@ -168,5 +169,52 @@ class TelnetClientTest extends \PHPUnit_Framework_TestCase
             ['party', ['$'], false, "\$", null, null, null, 'LOL'], // success custom line ending
             ['party', ['ERROR'], true, "ERROR", null, null, null, 'LOL'], // error custom line ending
         ];
+    }
+
+    public function testExecuteException()
+    {
+        $this->setExpectedException(TelnetExceptionInterface::class);
+
+        $client = m::mock(TelnetClient::class)->makePartial();
+        $client->execute('aCommand');
+    }
+
+    public function testWriteException()
+    {
+        $this->setExpectedException(TelnetExceptionInterface::class);
+
+        $client = m::mock(TelnetClient::class)->makePartial();
+
+        $socket = m::mock(Socket::class)
+            ->shouldReceive('write')
+            ->andThrow(\Exception::class)
+            ->shouldReceive('close')
+            ->getMock();
+
+        $client->setSocket($socket);
+        $client->execute('aCommand');
+    }
+
+    public function testReadException()
+    {
+        $this->setExpectedException(TelnetExceptionInterface::class);
+
+        $client = m::mock(TelnetClient::class)->makePartial();
+
+        $socket = m::mock(Socket::class)
+            ->shouldReceive('write')
+            ->shouldReceive('close')
+            ->shouldReceive('read')
+            ->andThrow(\Exception::class)
+            ->getMock();
+
+        $client->setSocket($socket);
+        $client->execute('aCommand');
+    }
+
+    public function testFactory()
+    {
+        $client = TelnetClient::factory();
+        $this->assertInstanceOf(TelnetClient::class, $client);
     }
 }

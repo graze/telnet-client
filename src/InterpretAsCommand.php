@@ -15,6 +15,8 @@
 namespace Graze\TelnetClient;
 
 use \Socket\Raw\Socket;
+use \Exception;
+use \Graze\TelnetClient\Exception\TelnetException;
 use \Graze\TelnetClient\Exception\UndefinedCommandException;
 
 class InterpretAsCommand
@@ -58,7 +60,7 @@ class InterpretAsCommand
      * @param Socket $socket
      *
      * @return bool
-     * @throws UndefinedCommandException
+     * @throws TelnetExceptionInterface
      */
     public function interpret($character, Socket $socket)
     {
@@ -66,17 +68,21 @@ class InterpretAsCommand
             return false;
         }
 
-        $command = $socket->read(1);
-        $option = $socket->read(1);
+        try {
+            $command = $socket->read(1);
+            $option = $socket->read(1);
 
-        if (in_array($command, [$this->DO, $this->DONT])) {
-            $socket->write($this->IAC . $this->WONT . $option);
-            return true;
-        }
+            if (in_array($command, [$this->DO, $this->DONT])) {
+                $socket->write($this->IAC . $this->WONT . $option);
+                return true;
+            }
 
-        if (in_array($command, [$this->WILL, $this->WONT])) {
-            $socket->write($this->IAC . $this->DONT . $option);
-            return true;
+            if (in_array($command, [$this->WILL, $this->WONT])) {
+                $socket->write($this->IAC . $this->DONT . $option);
+                return true;
+            }
+        } catch (Exception $e) {
+            throw new TelnetException('failed negotiating IAC', 0, $e);
         }
 
         throw new UndefinedCommandException($command);
