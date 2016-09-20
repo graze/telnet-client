@@ -7,7 +7,7 @@
 [![Quality Score](https://img.shields.io/scrutinizer/g/graze/telnet-client.svg?style=flat-square)](https://scrutinizer-ci.com/g/graze/telnet-client)
 [![Total Downloads](https://img.shields.io/packagist/dt/graze/telnet-client.svg?style=flat-square)](https://packagist.org/packages/graze/telnet-client)
 
-A telnet clinet written in PHP
+A telnet client written in PHP
 
 ## Install
 
