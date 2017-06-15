@@ -43,7 +43,7 @@ class PromptMatcher
             return '';
         };
 
-        $responseText = preg_replace_callback('/'.$prompt.'/', $callback, $subject);
+        $responseText = preg_replace_callback('/'.$prompt.'$/', $callback, $subject);
 
         if (empty($matches)) {
             return false;
