@@ -60,5 +60,15 @@
         "psr-4": {
             "Graze\\TelnetClient\\Test\\Unit\\": "tests/unit"
         }
+    },
+    "config": {
+        "platform": {
+            "ext-simplexml": "1.0",
+            "ext-dom": "1.0",
+            "ext-tokenizer": "1.0",
+            "ext-xmlwriter": "1.0",
+            "ext-sockets": "1.0",
+            "php": "5.6"
+        }
     }
 }
