@@ -240,7 +240,6 @@ class TelnetClient implements TelnetClientInterface
                 $isError = true;
                 break;
             }
-
         } while (true);
 
         return new TelnetResponse(

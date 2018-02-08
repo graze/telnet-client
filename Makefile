@@ -33,6 +33,13 @@ test-unit-coverage-html:
 test-unit-coverage-clover:
 	@docker-compose run --rm php-55 ./vendor/bin/phpunit --testsuite unit --coverage-clover=./tests/report/unit/coverage.clover
 
+# Code sniffer
+lint: ## Run phpcs against the code.
+	@docker-compose run --rm php-55 vendor/bin/phpcs -p --warning-severity=0 src/ tests/
+
+lint-fix: ## Run phpcbf against the code.
+	@docker-compose run --rm php-55 vendor/bin/phpcbf -p src/
+
 .SILENT: help
 help: ## Show this help message
 	set -x
