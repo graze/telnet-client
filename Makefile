@@ -8,7 +8,7 @@ setup: ## Install dependencies and set up example conf file
 # Testing
 
 test: ## Run all tests
-test: test-coverage test-coverage-html test-coverage-clover test-unit test-unit-coverage test-unit-coverage-html test-unit-coverage-clover
+test: test-coverage test-unit test-unit-coverage
 
 # Coverage tests
 test-coverage: ## Run coverage tests

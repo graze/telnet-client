@@ -8,7 +8,7 @@ services:
       - ~/.composer:/home/composer/.composer
 
   php-55:
-    image: php:5.5-alpine
+    image: graze/php-alpine:5-test
     volumes:
-      - .:/usr/src/app
-    working_dir: /usr/src/app
+      - .:/srv
+    working_dir: /srv
