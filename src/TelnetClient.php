@@ -16,6 +16,7 @@ namespace Graze\TelnetClient;
 
 use \Graze\TelnetClient\TelnetClientInterface;
 use \Graze\TelnetClient\PromptMatcher;
+use \Graze\TelnetClient\PromptMatcherInterface;
 use \Graze\TelnetClient\InterpretAsCommand;
 use \Socket\Raw\Socket;
 use \Socket\Raw\Factory as SocketFactory;
@@ -31,7 +32,7 @@ class TelnetClient implements TelnetClientInterface
     protected $socketFactory;
 
     /**
-     * @var PromptMatcher
+     * @var PromptMatcherInterface
      */
     protected $promptMatcher;
 
@@ -82,12 +83,12 @@ class TelnetClient implements TelnetClientInterface
 
     /**
      * @param SocketFactory $socketFactory
-     * @param PromptMatcher $promptMatcher
+     * @param PromptMatcherInterface $promptMatcher
      * @param InterpretAsCommand $interpretAsCommand
      */
     public function __construct(
         SocketFactory $socketFactory,
-        PromptMatcher $promptMatcher,
+        PromptMatcherInterface $promptMatcher,
         InterpretAsCommand $interpretAsCommand
     ) {
         $this->socketFactory = $socketFactory;
