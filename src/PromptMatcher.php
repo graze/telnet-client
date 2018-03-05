@@ -14,7 +14,7 @@
 
 namespace Graze\TelnetClient;
 
-class PromptMatcher
+class PromptMatcher implements PromptMatcherInterface
 {
     /**
      * @var array
