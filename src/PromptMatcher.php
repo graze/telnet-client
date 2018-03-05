@@ -14,7 +14,7 @@
 
 namespace Graze\TelnetClient;
 
-class PromptMatcher
+class PromptMatcher implements PromptMatcherInterface
 {
     /**
      * @var array
@@ -33,7 +33,7 @@ class PromptMatcher
      *
      * @return bool
      */
-    public function isMatch($prompt, $subject, $lineEnding)
+    public function isMatch($prompt, $subject, $lineEnding = null)
     {
         // cheap line ending check before expensive regex
         if (substr($subject, -1 * strlen($lineEnding)) != $lineEnding) {
