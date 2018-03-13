@@ -30,7 +30,7 @@ interface TelnetClientInterface
      *
      * @return \Graze\TelnetClient\TelnetResponseInterface
      */
-    public function execute($command, $prompt);
+    public function execute($command, $prompt = null);
 
     /**
      * @return \Socket\Raw\Socket
