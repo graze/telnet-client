@@ -104,10 +104,11 @@ class TelnetClient implements TelnetClientInterface
      * @param string $prompt
      * @param string $promptError
      * @param string $lineEnding
+     * @param float|null $timeout
      *
      * @throws TelnetExceptionInterface
      */
-    public function connect($dsn, $prompt = null, $promptError = null, $lineEnding = null)
+    public function connect($dsn, $prompt = null, $promptError = null, $lineEnding = null, $timeout = null)
     {
         if ($prompt !== null) {
             $this->setPrompt($prompt);
@@ -122,7 +123,7 @@ class TelnetClient implements TelnetClientInterface
         }
 
         try {
-            $socket = $this->socketFactory->createClient($dsn);
+            $socket = $this->socketFactory->createClient($dsn, $timeout);
         } catch (Exception $e) {
             throw new TelnetException(sprintf('unable to create socket connection to [%s]', $dsn), 0, $e);
         }

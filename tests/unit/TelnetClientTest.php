@@ -19,16 +19,17 @@ class TelnetClientTest extends \PHPUnit_Framework_TestCase
      * @param string $prompt
      * @param string $promptError
      * @param string $lineEnding
+     * @param float|null $timeout
      *
      * @return void
      */
-    public function testConnect($prompt = null, $promptError = null, $lineEnding = null)
+    public function testConnect($prompt = null, $promptError = null, $lineEnding = null, $timeout = null)
     {
         $dsn = 'localhost:80';
         $socket = m::mock(Socket::class);
         $socketFactory = m::mock(SocketFactory::class)
             ->shouldReceive('createClient')
-            ->with($dsn)
+            ->with($dsn, $timeout)
             ->andReturn($socket)
             ->once()
             ->getMock();
@@ -75,7 +76,7 @@ class TelnetClientTest extends \PHPUnit_Framework_TestCase
         }
 
         $telnetClient = $telnetClient->getMock()->makePartial();
-        $telnetClient->connect($dsn, $prompt, $promptError, $lineEnding);
+        $telnetClient->connect($dsn, $prompt, $promptError, $lineEnding, $timeout);
     }
 
     /**
@@ -85,6 +86,7 @@ class TelnetClientTest extends \PHPUnit_Framework_TestCase
     {
         return [
             ['PROMPT', 'PROMPTERROR', 'LINENDING'],
+            ['PROMPT', 'PROMPTERROR', 'LINENDING', 5],
             [null, null, null]
         ];
     }
