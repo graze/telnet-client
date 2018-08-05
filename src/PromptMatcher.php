@@ -35,10 +35,6 @@ class PromptMatcher implements PromptMatcherInterface
      */
     public function isMatch($prompt, $subject, $lineEnding = null)
     {
-        // cheap line ending check before expensive regex
-        if (substr($subject, -1 * strlen($lineEnding)) != $lineEnding) {
-            return false;
-        }
 
         $matches = [];
         $callback = function ($matchesCallback) use (&$matches) {
@@ -46,9 +42,8 @@ class PromptMatcher implements PromptMatcherInterface
             // replace matches with an empty string (remove prompt from $subject)
             return '';
         };
-        $pattern = sprintf('/%s%s$/', $prompt, $lineEnding);
 
-        $responseText = preg_replace_callback($pattern, $callback, $subject);
+        $responseText = preg_replace_callback('/'.$prompt.'$/', $callback, $subject);
 
         if (empty($matches)) {
             return false;
