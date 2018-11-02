@@ -8,7 +8,7 @@ setup: ## Install dependencies and set up example conf file
 # Testing
 
 test: ## Run all tests
-test: test-coverage test-unit test-unit-coverage
+test: test-coverage test-unit
 
 # Coverage tests
 test-coverage: ## Run coverage tests
@@ -23,15 +23,6 @@ test-coverage-clover:
 # Unit tests
 test-unit: ## Run unit tests
 	@docker-compose run --rm php-55 ./vendor/bin/phpunit --testsuite unit
-
-test-unit-coverage:
-	@docker-compose run --rm php-55 ./vendor/bin/phpunit --testsuite unit --coverage-text
-
-test-unit-coverage-html:
-	@docker-compose run --rm php-55 ./vendor/bin/phpunit --testsuite unit --coverage-html ./tests/report/unit/html
-
-test-unit-coverage-clover:
-	@docker-compose run --rm php-55 ./vendor/bin/phpunit --testsuite unit --coverage-clover=./tests/report/unit/coverage.clover
 
 # Code sniffer
 lint: ## Run phpcs against the code.
