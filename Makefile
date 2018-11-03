@@ -8,7 +8,7 @@ setup: ## Install dependencies and set up example conf file
 # Testing
 
 test: ## Run all tests
-test: test-coverage test-unit
+test: test-unit
 
 # Coverage tests
 test-coverage: ## Run coverage tests
