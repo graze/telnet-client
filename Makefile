@@ -12,24 +12,24 @@ test: test-unit
 
 # Coverage tests
 test-coverage: ## Run coverage tests
-	@docker-compose run --rm php-55 ./vendor/bin/phpunit --coverage-text
+	@docker-compose run --rm php ./vendor/bin/phpunit --coverage-text
 
 test-coverage-html:
-	@docker-compose run --rm php-55 ./vendor/bin/phpunit --coverage-html ./tests/report/html
+	@docker-compose run --rm php ./vendor/bin/phpunit --coverage-html ./tests/report/html
 
 test-coverage-clover:
-	@docker-compose run --rm php-55 ./vendor/bin/phpunit --coverage-clover=./tests/report/coverage.clover
+	@docker-compose run --rm php ./vendor/bin/phpunit --coverage-clover=./tests/report/coverage.clover
 
 # Unit tests
 test-unit: ## Run unit tests
-	@docker-compose run --rm php-55 ./vendor/bin/phpunit --testsuite unit
+	@docker-compose run --rm php ./vendor/bin/phpunit --testsuite unit
 
 # Code sniffer
 lint: ## Run phpcs against the code.
-	@docker-compose run --rm php-55 vendor/bin/phpcs -p --warning-severity=0 src/ tests/
+	@docker-compose run --rm php vendor/bin/phpcs -p --warning-severity=0 src/ tests/
 
 lint-fix: ## Run phpcbf against the code.
-	@docker-compose run --rm php-55 vendor/bin/phpcbf -p src/
+	@docker-compose run --rm php vendor/bin/phpcbf -p src/
 
 .SILENT: help
 help: ## Show this help message
