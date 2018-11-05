@@ -2,7 +2,7 @@
 
 Contributions are **welcome**!
 
-We accept contributions via Pull Requests on [Github](https://github.com/graze/:package-name). We also recommend reading [How to write the perfect Pull Request](https://github.com/blog/1943-how-to-write-the-perfect-pull-request) which has some great tips and advice.
+We accept contributions via Pull Requests on [Github](https://github.com/graze/telnet-client). We also recommend reading [How to write the perfect Pull Request](https://github.com/blog/1943-how-to-write-the-perfect-pull-request) which has some great tips and advice.
 
 ## Reporting an Issue
 
@@ -21,14 +21,14 @@ made them including any relevant information or justifications that will aid the
 
 ## Development Environment
 
-If you need a vagrant box for development, we recommend using [adlawson/vagrantfiles](https://github.com/adlawson/vagrantfiles), for PHP:
+A Dockerfile is included in this repository for development. All make commands use the docker container to run the code.
+An initial step will need to be run to set up the environment:
 
 ```shell
-$ curl -O https://raw.githubusercontent.com/adlawson/vagrantfiles/master/php/Vagrantfile
-$ vagrant up
-$ vagrant ssh
-$ cd /srv
+$ make build
 ```
+
+A complete list of commands can be found by running: `$ make help`
 
 ## Running Tests
 
@@ -38,33 +38,10 @@ You can run all of the test suites in the project using:
 $ make test
 ```
 
-Or run individual suites using:
-
-```shell
-$ make test-unit
-$ make test-functional
-```
-
-You can get a coverage report in text:
+You can get a coverage report in text, html and clover XML formats:
 
 ```shell
 $ make test-coverage
-$ make test-unit-coverage
-$ make test-functional-coverage
-```
-
-An HTML coverage report can be written to `tests/report` using:
-
-```shell
 $ make test-coverage-html
-$ make test-unit-coverage-html
-$ make test-functional-coverage-html
-```
-
-For a coverage report in clover XML format use:
-
-```shell
 $ make test-coverage-clover
-$ make test-unit-coverage-clover
-$ make test-functional-coverage-clover
 ```

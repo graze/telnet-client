@@ -2,7 +2,7 @@
 
 # Setting up
 
-setup: ## Install dependencies and set up example conf file
+build: ## Install dependencies and set up example conf file
 	@docker-compose run --rm composer install
 
 # Testing
