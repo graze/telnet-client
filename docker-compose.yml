@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  composer:
+    image: graze/composer
+    volumes:
+      - .:/usr/src/app
+      - ~/.composer:/home/composer/.composer
+
+  php:
+    image: graze/php-alpine:5-test
+    volumes:
+      - .:/srv
+    working_dir: /srv

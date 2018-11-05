@@ -1,7 +1,7 @@
 # .scrutinizer.yml
 build:
     environment:
-        php: '5.5.25'
+        php: '5.6'
 
 checks:
     php:
