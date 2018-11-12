@@ -39,6 +39,7 @@ class PromptMatcherTest extends \PHPUnit_Framework_TestCase
     {
         return [
             ['OK', 'this is a response', "\n", false],
+            ['OK', 'this is a response', null, false], // null line ending
             ['OK', "this is a response\nOK\n", "\n", true, ['OK'], 'this is a response'],
             ['(ERROR) ([0-9]{1,3})', "party\r\nERROR 123\r\n", "\r\n", true, ['ERROR 123', 'ERROR', '123'], 'party']
         ];
