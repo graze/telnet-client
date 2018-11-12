@@ -36,7 +36,7 @@ class PromptMatcher implements PromptMatcherInterface
     public function isMatch($prompt, $subject, $lineEnding = null)
     {
         // cheap line ending check before expensive regex
-        if (substr($subject, -1 * strlen($lineEnding)) != $lineEnding) {
+        if (!is_null($lineEnding) && substr($subject, -1 * strlen($lineEnding)) != $lineEnding) {
             return false;
         }
 
