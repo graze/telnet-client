@@ -3,7 +3,7 @@
 /**
  * This file is part of graze/telnet-client.
  *
- * Copyright (c) 2016 Nature Delivered Ltd. <https://www.graze.com>
+ * Copyright (c) 2018 Nature Delivered Ltd. <https://www.graze.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,145 +14,57 @@
 
 namespace Graze\TelnetClient;
 
-use \Graze\TelnetClient\TelnetClientInterface;
-use \Graze\TelnetClient\PromptMatcher;
-use \Graze\TelnetClient\PromptMatcherInterface;
-use \Graze\TelnetClient\InterpretAsCommand;
-use \Socket\Raw\Socket;
-use \Socket\Raw\Factory as SocketFactory;
-use \Graze\TelnetClient\TelnetClientBuilder;
-use \Exception;
-use \Graze\TelnetClient\Exception\TelnetException;
+use Graze\TelnetClient\Exception\TelnetException;
+use Graze\TelnetClient\Exception\TelnetExceptionInterface;
+use Graze\TelnetClient\Reader\Reader;
+use Graze\TelnetClient\Reader\ReaderInterface;
+use Graze\TelnetClient\TelnetResponse;
+use Graze\TelnetClient\TelnetResponseInterface;
+use Graze\TelnetClient\TelnetClientInterface;
+use Socket\Raw\Factory as SocketFactory;
+use Socket\Raw\Socket;
 
 class TelnetClient implements TelnetClientInterface
 {
     /**
      * @var SocketFactory
      */
-    protected $socketFactory;
+    private $socketFactory;
 
     /**
-     * @var PromptMatcherInterface
+     * @var ReaderInterface
      */
-    protected $promptMatcher;
-
-    /**
-     * @var InterpretAsCommand
-     */
-    protected $interpretAsCommand;
-
-    /**
-     * @var string
-     */
-    protected $prompt = '\$';
-
-    /**
-     * @var string
-     */
-    protected $promptError = 'ERROR';
-
-    /**
-     * @var string
-     */
-    protected $lineEnding = "\n";
+    private $reader;
 
     /**
      * @var Socket
      */
-    protected $socket;
-
-    /**
-     * @var string
-     */
-    protected $buffer;
-
-    /**
-     * @var string
-     */
-    protected $NULL;
-
-    /**
-     * @var string
-     */
-    protected $DC1;
-
-    /**
-     * @var string
-     */
-    protected $IAC;
+    private $socket;
 
     /**
      * @param SocketFactory $socketFactory
-     * @param PromptMatcherInterface $promptMatcher
-     * @param InterpretAsCommand $interpretAsCommand
+     * @param ReaderInterface $reader
      */
     public function __construct(
         SocketFactory $socketFactory,
-        PromptMatcherInterface $promptMatcher,
-        InterpretAsCommand $interpretAsCommand
+        ReaderInterface $reader
     ) {
         $this->socketFactory = $socketFactory;
-        $this->promptMatcher = $promptMatcher;
-        $this->interpretAsCommand = $interpretAsCommand;
-
-        $this->NULL = chr(0);
-        $this->DC1 = chr(17);
+        $this->reader = $reader;
     }
 
     /**
      * @param string $dsn
-     * @param string $prompt
-     * @param string $promptError
-     * @param string $lineEnding
      * @param float|null $timeout
-     *
      * @throws TelnetExceptionInterface
      */
-    public function connect($dsn, $prompt = null, $promptError = null, $lineEnding = null, $timeout = null)
+    public function connect($dsn, $timeout = null)
     {
-        if ($prompt !== null) {
-            $this->setPrompt($prompt);
-        }
-
-        if ($promptError !== null) {
-            $this->setPromptError($promptError);
-        }
-
-        if ($lineEnding !== null) {
-            $this->setLineEnding($lineEnding);
-        }
-
         try {
-            $socket = $this->socketFactory->createClient($dsn, $timeout);
+            $this->setSocket($this->socketFactory->createClient($dsn, $timeout));
         } catch (Exception $e) {
             throw new TelnetException(sprintf('unable to create socket connection to [%s]', $dsn), 0, $e);
         }
-
-        $this->setSocket($socket);
-    }
-
-    /**
-     * @param string $prompt
-     */
-    public function setPrompt($prompt)
-    {
-        $this->prompt = $prompt;
-    }
-
-    /**
-     * @param string $promptError
-     */
-    public function setPromptError($promptError)
-    {
-        $this->promptError = $promptError;
-    }
-
-    /**
-     * @param string $lineEnding
-     */
-    public function setLineEnding($lineEnding)
-    {
-        $this->lineEnding = $lineEnding;
     }
 
     /**
@@ -164,7 +76,7 @@ class TelnetClient implements TelnetClientInterface
     }
 
     /**
-     * @return \Socket\Raw\Socket
+     * @return Socket
      */
     public function getSocket()
     {
@@ -173,80 +85,32 @@ class TelnetClient implements TelnetClientInterface
 
     /**
      * @param string $command
-     * @param string $prompt
-     *
-     * @return \Graze\TelnetClient\TelnetResponseInterface
+     * @param string $expected
+     * @param string $expectedError
+     * @return TelnetResponseInterface
      */
-    public function execute($command, $prompt = null)
+    public function execute($command, $expected = null, $expectedError = null)
     {
         if (!$this->socket) {
-            throw new TelnetException('attempt to execute without a connection - call connect first');
+            throw new TelnetException('Attempt to execute without a connection - was connect() called?');
         }
 
         $this->write($command);
-        return $this->getResponse($prompt);
+        return $this->reader->read($this->socket, $expected, $expectedError);
     }
 
     /**
      * @param string $command
-     *
      * @return void
      * @throws TelnetExceptionInterface
      */
-    protected function write($command)
+    private function write($command)
     {
         try {
-            $this->socket->write($command . $this->lineEnding);
+            $this->socket->write($command);
         } catch (Exception $e) {
-            throw new TelnetException(sprintf('failed writing to socket [%s]', $command), 0, $e);
+            throw new TelnetException(sprintf('Failed writing to socket [%s]', $command), 0, $e);
         }
-    }
-
-    /**
-     * @param string $prompt
-     *
-     * @return \Graze\TelnetClient\TelnetResponseInterface
-     * @throws TelnetExceptionInterface
-     */
-    protected function getResponse($prompt = null)
-    {
-        $isError = false;
-        $buffer = '';
-        do {
-            // process one character at a time
-            try {
-                $character = $this->socket->read(1);
-            } catch (Exception $e) {
-                throw new TelnetException('failed reading from socket', 0, $e);
-            }
-
-            if (in_array($character, [$this->NULL, $this->DC1])) {
-                break;
-            }
-
-            if ($this->interpretAsCommand->interpret($character, $this->socket)) {
-                continue;
-            }
-
-            $buffer .= $character;
-
-            // check for prompt
-            if ($this->promptMatcher->isMatch($prompt ?: $this->prompt, $buffer, $this->lineEnding)) {
-                break;
-            }
-
-            // check for error prompt
-            if ($this->promptMatcher->isMatch($this->promptError, $buffer, $this->lineEnding)) {
-                $isError = true;
-                break;
-            }
-        } while (true);
-
-        return new TelnetResponse(
-            $isError,
-            $this->promptMatcher->getResponseText(),
-            $this->promptMatcher->getMatches()
-        );
     }
 
     /**
@@ -256,14 +120,13 @@ class TelnetClient implements TelnetClientInterface
     {
         return new static(
             new SocketFactory(),
-            new PromptMatcher(),
-            new InterpretAsCommand()
+            Reader::factory()
         );
     }
 
     public function __destruct()
     {
-        if (!$this->socket) {
+        if (is_null($this->socket)) {
             return;
         }
 

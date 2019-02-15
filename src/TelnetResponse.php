@@ -3,7 +3,7 @@
 /**
  * This file is part of graze/telnet-client.
  *
- * Copyright (c) 2016 Nature Delivered Ltd. <https://www.graze.com>
+ * Copyright (c) 2018 Nature Delivered Ltd. <https://www.graze.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,35 +14,28 @@
 
 namespace Graze\TelnetClient;
 
-use \Graze\TelnetClient\TelnetResponseInterface;
+use Graze\TelnetClient\TelnetResponseInterface;
 
 class TelnetResponse implements TelnetResponseInterface
 {
     /**
      * @var bool
      */
-    protected $isError;
-
-    /**
-     * @var string
-     */
-    protected $responseText;
+    private $isError;
 
     /**
      * @var array
      */
-    protected $promptMatches;
+    private $matches = [];
 
     /**
      * @param bool $isError
-     * @param string $responseText
-     * @param array $promptMatches
+     * @param array $matches
      */
-    public function __construct($isError, $responseText, array $promptMatches)
+    public function __construct($isError, array $matches)
     {
         $this->isError = (bool) $isError;
-        $this->responseText = $responseText;
-        $this->promptMatches = $promptMatches;
+        $this->matches = $matches;
     }
 
     /**
@@ -54,18 +47,10 @@ class TelnetResponse implements TelnetResponseInterface
     }
 
     /**
-     * @return string
-     */
-    public function getResponseText()
-    {
-        return $this->responseText;
-    }
-
-    /**
      * @return array
      */
-    public function getPromptMatches()
+    public function getMatches()
     {
-        return $this->promptMatches;
+        return $this->matches;
     }
 }

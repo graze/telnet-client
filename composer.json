@@ -60,7 +60,9 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Graze\\TelnetClient\\Test\\Unit\\": "tests/unit"
+            "Graze\\TelnetClient\\Test\\Unit\\": "tests/unit",
+            "Graze\\TelnetClient\\Test\\Feature\\": "tests/feature",
+            "Graze\\TelnetClient\\Test\\": "tests/src"
         }
     },
     "config": {

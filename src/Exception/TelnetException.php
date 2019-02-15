@@ -3,7 +3,7 @@
 /**
  * This file is part of graze/telnet-client.
  *
- * Copyright (c) 2016 Nature Delivered Ltd. <https://www.graze.com>
+ * Copyright (c) 2018 Nature Delivered Ltd. <https://www.graze.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,8 +14,8 @@
 
 namespace Graze\TelnetClient\Exception;
 
-use \RuntimeException;
-use \Graze\TelnetClient\Exception\TelnetExceptionInterface;
+use Graze\TelnetClient\Exception\TelnetExceptionInterface;
+use RuntimeException;
 
 class TelnetException extends RuntimeException implements TelnetExceptionInterface
 {

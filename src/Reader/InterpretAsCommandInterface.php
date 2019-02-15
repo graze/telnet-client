@@ -12,9 +12,18 @@
  * @link https://github.com/graze/telnet-client
  */
 
-namespace Graze\TelnetClient\Exception;
+namespace Graze\TelnetClient\Reader;
 
-interface TelnetExceptionInterface
+use Socket\Raw\Socket;
+use Graze\TelnetClient\Exception\TelnetExceptionInterface;
+
+interface InterpretAsCommandInterface
 {
-
+    /**
+     * @param string $character
+     * @param Socket $socket
+     * @return bool
+     * @throws TelnetExceptionInterface
+     */
+    public function interpret($character, Socket $socket);
 }

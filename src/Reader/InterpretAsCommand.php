@@ -3,7 +3,7 @@
 /**
  * This file is part of graze/telnet-client.
  *
- * Copyright (c) 2016 Nature Delivered Ltd. <https://www.graze.com>
+ * Copyright (c) 2018 Nature Delivered Ltd. <https://www.graze.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,39 +12,41 @@
  * @link https://github.com/graze/telnet-client
  */
 
-namespace Graze\TelnetClient;
+namespace Graze\TelnetClient\Reader;
 
-use \Socket\Raw\Socket;
-use \Exception;
-use \Graze\TelnetClient\Exception\TelnetException;
-use \Graze\TelnetClient\Exception\UndefinedCommandException;
+use Exception;
+use Socket\Raw\Socket;
+use Graze\TelnetClient\Exception\TelnetException;
+use Graze\TelnetClient\Exception\TelnetExceptionInterface;
+use Graze\TelnetClient\Exception\UndefinedCommandException;
+use Graze\TelnetClient\Reader\InterpretAsCommandInterface;
 
-class InterpretAsCommand
+class InterpretAsCommand implements InterpretAsCommandInterface
 {
     /**
      * @var string
      */
-    protected $WILL;
+    private $WILL;
 
     /**
      * @var string
      */
-    protected $WONT;
+    private $WONT;
 
     /**
      * @var string
      */
-    protected $DO;
+    private $DO;
 
     /**
      * @var string
      */
-    protected $DONT;
+    private $DONT;
 
     /**
      * @var string
      */
-    protected $IAC;
+    private $IAC;
 
     public function __construct()
     {
@@ -58,7 +60,6 @@ class InterpretAsCommand
     /**
      * @param string $character
      * @param Socket $socket
-     *
      * @return bool
      * @throws TelnetExceptionInterface
      */
@@ -82,7 +83,7 @@ class InterpretAsCommand
                 return true;
             }
         } catch (Exception $e) {
-            throw new TelnetException('failed negotiating IAC', 0, $e);
+            throw new TelnetException('Failed negotiating IAC', 0, $e);
         }
 
         throw new UndefinedCommandException($command);

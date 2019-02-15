@@ -12,36 +12,20 @@
  * @link https://github.com/graze/telnet-client
  */
 
-namespace Graze\TelnetClient;
+namespace Graze\TelnetClient\Reader;
 
 use Graze\TelnetClient\Exception\TelnetExceptionInterface;
 use Graze\TelnetClient\TelnetResponseInterface;
 use Socket\Raw\Socket;
 
-interface TelnetClientInterface
+interface ReaderInterface
 {
     /**
-     * @param string $dsn
-     * @param float|null $timeout
-     * @throws TelnetExceptionInterface
-     */
-    public function connect($dsn, $timeout = null);
-
-    /**
      * @param Socket $socket
-     */
-    public function setSocket(Socket $socket);
-
-    /**
-     * @return Socket
-     */
-    public function getSocket();
-
-    /**
-     * @param string $command
      * @param string $expected
      * @param string $expectedError
      * @return TelnetResponseInterface
+     * @throws TelnetExceptionInterface
      */
-    public function execute($command, $expected = null, $expectedError = null);
+    public function read(Socket $socket, $expected, $expectedError);
 }
