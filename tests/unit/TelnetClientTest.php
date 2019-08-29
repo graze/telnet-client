@@ -155,6 +155,72 @@ class TelnetClientTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($command, $response->getResponseText());
         $this->assertEquals($promptMatches, $response->getPromptMatches());
     }
+    
+    /**
+     * @dataProvider dataProviderExecute
+     *
+     * @param string $command
+     * @param array $promptMatches
+     * @param bool $isError
+     * @param string $promptResponse
+     * @param string $promptGlobal
+     * @param string $promptLocal
+     * @param string $promptError
+     * @param string $lineEnding
+     *
+     * @return void
+     */
+    public function testExecutePromptError(
+        $command,
+        array $promptMatches,
+        $isError,
+        $promptResponse,
+        $promptGlobal = null,
+        $promptLocal = null,
+        $promptError = null,
+        $lineEnding = null
+    ) {
+        $lineEnding = $lineEnding ?: "\n";
+        $socket = m::mock(Socket::class)
+            ->shouldReceive('write')
+            ->with($command.$lineEnding)
+            ->once();
+
+        // echo the command back when reading each character one-by-one from the socket
+        $commandResponse = str_split($command.$lineEnding.$promptResponse.$lineEnding);
+        $socket = $socket
+            ->shouldReceive('read')
+            ->with(1);
+        call_user_func_array([$socket, 'andReturn'], $commandResponse);
+        $socket = $socket
+            ->times(count($commandResponse))
+            ->shouldReceive('close')
+            ->once()
+            ->getMock();
+
+        $socketFactory = m::mock(SocketFactory::class)
+            ->shouldReceive('createClient')
+            ->andReturn($socket)
+            ->once()
+            ->getMock();
+
+        $promptMatcher = new PromptMatcher();
+
+        $interpretAsCommand = m::mock(InterpretAsCommand::class)
+            ->shouldReceive('interpret')
+            ->times(count($commandResponse))
+            ->andReturn(false)
+            ->getMock();
+
+        $telnetClient = new TelnetClient($socketFactory, $promptMatcher, $interpretAsCommand);
+        $telnetClient->connect('127.0.0.1:23', $promptGlobal, NULL, $lineEnding);
+
+        $response = $telnetClient->execute($command, $promptLocal, $promptError);
+        $this->assertInstanceOf(TelnetResponseInterface::class, $response);
+        $this->assertEquals($isError, $response->isError());
+        $this->assertEquals($command, $response->getResponseText());
+        $this->assertEquals($promptMatches, $response->getPromptMatches());
+    }
 
     /**
      * @return array
