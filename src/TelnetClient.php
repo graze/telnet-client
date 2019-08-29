@@ -174,6 +174,7 @@ class TelnetClient implements TelnetClientInterface
     /**
      * @param string $command
      * @param string $prompt
+     * @param string $promptError
      *
      * @return \Graze\TelnetClient\TelnetResponseInterface
      */
@@ -204,6 +205,7 @@ class TelnetClient implements TelnetClientInterface
 
     /**
      * @param string $prompt
+     * @param string $promptError
      *
      * @return \Graze\TelnetClient\TelnetResponseInterface
      * @throws TelnetExceptionInterface
