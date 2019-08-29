@@ -177,14 +177,14 @@ class TelnetClient implements TelnetClientInterface
      *
      * @return \Graze\TelnetClient\TelnetResponseInterface
      */
-    public function execute($command, $prompt = null)
+    public function execute($command, $prompt = null, $promptError = null)
     {
         if (!$this->socket) {
             throw new TelnetException('attempt to execute without a connection - call connect first');
         }
 
         $this->write($command);
-        return $this->getResponse($prompt);
+        return $this->getResponse($prompt, $promptError);
     }
 
     /**
@@ -208,7 +208,7 @@ class TelnetClient implements TelnetClientInterface
      * @return \Graze\TelnetClient\TelnetResponseInterface
      * @throws TelnetExceptionInterface
      */
-    protected function getResponse($prompt = null)
+    protected function getResponse($prompt = null, $promptError = null)
     {
         $isError = false;
         $buffer = '';
@@ -236,7 +236,7 @@ class TelnetClient implements TelnetClientInterface
             }
 
             // check for error prompt
-            if ($this->promptMatcher->isMatch($this->promptError, $buffer, $this->lineEnding)) {
+            if ($this->promptMatcher->isMatch($promptError ?: $this->promptError, $buffer, $this->lineEnding)) {
                 $isError = true;
                 break;
             }
