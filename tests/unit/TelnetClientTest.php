@@ -213,7 +213,7 @@ class TelnetClientTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $telnetClient = new TelnetClient($socketFactory, $promptMatcher, $interpretAsCommand);
-        $telnetClient->connect('127.0.0.1:23', $promptGlobal, NULL, $lineEnding);
+        $telnetClient->connect('127.0.0.1:23', $promptGlobal, null, $lineEnding);
 
         $response = $telnetClient->execute($command, $promptLocal, $promptError);
         $this->assertInstanceOf(TelnetResponseInterface::class, $response);
