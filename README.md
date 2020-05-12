@@ -210,7 +210,7 @@ Based on [bestnetwork/Telnet](https://github.com/bestnetwork/Telnet).
 * Marc Ennaji
 * Matthias Blaser <mb@adfinis.ch>
 * Christian Hammers <chammers@netcologne.de>
-* [All Contributors](../../contributors)
+* [All Contributors](https://github.com/graze/telnet-client/contributors)
 
 ## License
 
