@@ -134,6 +134,7 @@ class TelnetClientTest extends PHPUnit_Framework_TestCase
             ->once()
             ->getMock();
 
+        /** @var SocketFactory $socketFactory */
         $socketFactory = m::mock(SocketFactory::class)
             ->shouldReceive('createClient')
             ->andReturn($socket)
@@ -142,6 +143,7 @@ class TelnetClientTest extends PHPUnit_Framework_TestCase
 
         $promptMatcher = new PromptMatcher();
 
+        /** @var InterpretAsCommand $interpretAsCommand */
         $interpretAsCommand = m::mock(InterpretAsCommand::class)
             ->shouldReceive('interpret')
             ->times(count($commandResponse))
@@ -200,6 +202,7 @@ class TelnetClientTest extends PHPUnit_Framework_TestCase
             ->once()
             ->getMock();
 
+        /** @var SocketFactory $socketFactory */
         $socketFactory = m::mock(SocketFactory::class)
             ->shouldReceive('createClient')
             ->andReturn($socket)
@@ -208,6 +211,7 @@ class TelnetClientTest extends PHPUnit_Framework_TestCase
 
         $promptMatcher = new PromptMatcher();
 
+        /** @var InterpretAsCommand $interpretAsCommand */
         $interpretAsCommand = m::mock(InterpretAsCommand::class)
             ->shouldReceive('interpret')
             ->times(count($commandResponse))

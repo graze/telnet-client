@@ -65,6 +65,7 @@ class InterpretAsCommandTest extends PHPUnit_Framework_TestCase
 
     public function testUndefinedCommandException()
     {
+        /** @var Socket $socket */
         $socket = m::mock(Socket::class)
             ->shouldReceive('read')
             ->with(1)
@@ -81,6 +82,7 @@ class InterpretAsCommandTest extends PHPUnit_Framework_TestCase
     {
         $this->setExpectedException(TelnetExceptionInterface::class);
 
+        /** @var Socket $socket */
         $socket = m::mock(Socket::class)
             ->shouldReceive('read')
             ->andThrow(Exception::class)
