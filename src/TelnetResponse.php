@@ -14,8 +14,6 @@
 
 namespace Graze\TelnetClient;
 
-use \Graze\TelnetClient\TelnetResponseInterface;
-
 class TelnetResponse implements TelnetResponseInterface
 {
     /**

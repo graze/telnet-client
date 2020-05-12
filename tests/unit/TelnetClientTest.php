@@ -2,14 +2,14 @@
 
 namespace Graze\TelnetClient\Test\Unit;
 
-use \Mockery as m;
-use \Socket\Raw\Socket;
-use \Socket\Raw\Factory as SocketFactory;
-use \Graze\TelnetClient\PromptMatcher;
-use \Graze\TelnetClient\InterpretAsCommand;
-use \Graze\TelnetClient\TelnetClient;
-use \Graze\TelnetClient\TelnetResponseInterface;
-use \Graze\TelnetClient\Exception\TelnetExceptionInterface;
+use Graze\TelnetClient\Exception\TelnetExceptionInterface;
+use Graze\TelnetClient\InterpretAsCommand;
+use Graze\TelnetClient\PromptMatcher;
+use Graze\TelnetClient\TelnetClient;
+use Graze\TelnetClient\TelnetResponseInterface;
+use Mockery as m;
+use Socket\Raw\Factory as SocketFactory;
+use Socket\Raw\Socket;
 
 class TelnetClientTest extends \PHPUnit_Framework_TestCase
 {

@@ -2,11 +2,11 @@
 
 namespace Graze\TelnetClient\Test\Unit;
 
-use \Mockery as m;
-use \Socket\Raw\Socket;
-use \Graze\TelnetClient\InterpretAsCommand;
-use \Graze\TelnetClient\Exception\UndefinedCommandException;
-use \Graze\TelnetClient\Exception\TelnetExceptionInterface;
+use Graze\TelnetClient\Exception\TelnetExceptionInterface;
+use Graze\TelnetClient\Exception\UndefinedCommandException;
+use Graze\TelnetClient\InterpretAsCommand;
+use Mockery as m;
+use Socket\Raw\Socket;
 
 class InterpretAsCommandTest extends \PHPUnit_Framework_TestCase
 {

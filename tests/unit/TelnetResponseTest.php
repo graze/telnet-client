@@ -2,7 +2,7 @@
 
 namespace Graze\TelnetClient\Test\Unit;
 
-use \Graze\TelnetClient\TelnetResponse;
+use Graze\TelnetClient\TelnetResponse;
 
 class TelnetResponseTest extends \PHPUnit_Framework_TestCase
 {
