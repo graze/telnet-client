@@ -16,6 +16,7 @@ namespace Graze\TelnetClient;
 
 use Exception;
 use Graze\TelnetClient\Exception\TelnetException;
+use Graze\TelnetClient\Exception\TelnetExceptionInterface;
 use Socket\Raw\Factory as SocketFactory;
 use Socket\Raw\Socket;
 

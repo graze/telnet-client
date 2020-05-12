@@ -31,8 +31,8 @@ class InterpretAsCommandTest extends PHPUnit_Framework_TestCase
             $socket
                 ->shouldReceive('read')
                 ->andReturn($command, $option)
-                ->twice()
-                ->shouldReceive('write')
+                ->twice();
+            $socket->shouldReceive('write')
                 ->with($response)
                 ->once()
                 ->getMock();

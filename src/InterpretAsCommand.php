@@ -16,6 +16,7 @@ namespace Graze\TelnetClient;
 
 use Exception;
 use Graze\TelnetClient\Exception\TelnetException;
+use Graze\TelnetClient\Exception\TelnetExceptionInterface;
 use Graze\TelnetClient\Exception\UndefinedCommandException;
 use Socket\Raw\Socket;
 
