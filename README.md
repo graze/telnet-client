@@ -45,7 +45,7 @@ $resp = $client->execute($command);
 
 ### Responses
 
-Once a command has been sent, the socket is read until a specific sequence is encountered. This is a line ending immediately preceeded by either a prompt or an error prompt.
+Once a command has been sent, the socket is read until a specific sequence is encountered. This is a line ending immediately preceded by either a prompt, or an error prompt.
 At this point the `execute` method returns a `TelnetResponseInterface` object:
 
 ```php
