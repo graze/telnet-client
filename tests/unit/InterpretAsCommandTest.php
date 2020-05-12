@@ -2,13 +2,15 @@
 
 namespace Graze\TelnetClient\Test\Unit;
 
-use \Mockery as m;
-use \Socket\Raw\Socket;
-use \Graze\TelnetClient\InterpretAsCommand;
-use \Graze\TelnetClient\Exception\UndefinedCommandException;
-use \Graze\TelnetClient\Exception\TelnetExceptionInterface;
+use Exception;
+use Graze\TelnetClient\Exception\TelnetExceptionInterface;
+use Graze\TelnetClient\Exception\UndefinedCommandException;
+use Graze\TelnetClient\InterpretAsCommand;
+use Mockery as m;
+use PHPUnit_Framework_TestCase;
+use Socket\Raw\Socket;
 
-class InterpretAsCommandTest extends \PHPUnit_Framework_TestCase
+class InterpretAsCommandTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @dataProvider dataProviderInterpret
@@ -29,8 +31,8 @@ class InterpretAsCommandTest extends \PHPUnit_Framework_TestCase
             $socket
                 ->shouldReceive('read')
                 ->andReturn($command, $option)
-                ->twice()
-                ->shouldReceive('write')
+                ->twice();
+            $socket->shouldReceive('write')
                 ->with($response)
                 ->once()
                 ->getMock();
@@ -63,6 +65,7 @@ class InterpretAsCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testUndefinedCommandException()
     {
+        /** @var Socket $socket */
         $socket = m::mock(Socket::class)
             ->shouldReceive('read')
             ->with(1)
@@ -79,9 +82,10 @@ class InterpretAsCommandTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException(TelnetExceptionInterface::class);
 
+        /** @var Socket $socket */
         $socket = m::mock(Socket::class)
             ->shouldReceive('read')
-            ->andThrow(\Exception::class)
+            ->andThrow(Exception::class)
             ->getMock();
         $iac = new InterpretAsCommand();
         $iac->interpret(chr(255), $socket);

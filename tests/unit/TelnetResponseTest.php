@@ -2,9 +2,10 @@
 
 namespace Graze\TelnetClient\Test\Unit;
 
-use \Graze\TelnetClient\TelnetResponse;
+use Graze\TelnetClient\TelnetResponse;
+use PHPUnit_Framework_TestCase;
 
-class TelnetResponseTest extends \PHPUnit_Framework_TestCase
+class TelnetResponseTest extends PHPUnit_Framework_TestCase
 {
     public function testGetters()
     {

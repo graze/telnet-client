@@ -17,7 +17,7 @@ the following criteria:
 - **Tests** - your contribution will not be merged unless it has tests covering the changes.
 - **Documentation** - please ensure that README.md and any other documentation relevant to your change is up-to-date.
 - **Description** - please provide a description of your pull request that details the changes you've made, why you've
-made them including any relevant information or justifications that will aid the person reviewing you changes.
+made them including any relevant information or justifications that will aid the person reviewing your changes.
 
 ## Development Environment
 
@@ -32,7 +32,7 @@ A complete list of commands can be found by running: `$ make help`
 
 ## Running Tests
 
-You can run all of the test suites in the project using:
+You can run all the test suites in the project using:
 
 ```shell
 $ make test

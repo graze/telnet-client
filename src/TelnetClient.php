@@ -14,15 +14,11 @@
 
 namespace Graze\TelnetClient;
 
-use \Graze\TelnetClient\TelnetClientInterface;
-use \Graze\TelnetClient\PromptMatcher;
-use \Graze\TelnetClient\PromptMatcherInterface;
-use \Graze\TelnetClient\InterpretAsCommand;
-use \Socket\Raw\Socket;
-use \Socket\Raw\Factory as SocketFactory;
-use \Graze\TelnetClient\TelnetClientBuilder;
-use \Exception;
-use \Graze\TelnetClient\Exception\TelnetException;
+use Exception;
+use Graze\TelnetClient\Exception\TelnetException;
+use Graze\TelnetClient\Exception\TelnetExceptionInterface;
+use Socket\Raw\Factory as SocketFactory;
+use Socket\Raw\Socket;
 
 class TelnetClient implements TelnetClientInterface
 {
@@ -164,7 +160,7 @@ class TelnetClient implements TelnetClientInterface
     }
 
     /**
-     * @return \Socket\Raw\Socket
+     * @return Socket
      */
     public function getSocket()
     {
@@ -176,7 +172,7 @@ class TelnetClient implements TelnetClientInterface
      * @param string $prompt
      * @param string $promptError
      *
-     * @return \Graze\TelnetClient\TelnetResponseInterface
+     * @return TelnetResponseInterface
      */
     public function execute($command, $prompt = null, $promptError = null)
     {
@@ -207,7 +203,7 @@ class TelnetClient implements TelnetClientInterface
      * @param string $prompt
      * @param string $promptError
      *
-     * @return \Graze\TelnetClient\TelnetResponseInterface
+     * @return TelnetResponseInterface
      * @throws TelnetExceptionInterface
      */
     protected function getResponse($prompt = null, $promptError = null)
