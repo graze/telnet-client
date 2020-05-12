@@ -73,11 +73,27 @@ public function getPromptMatches();
 
 A success response object might look like:
 
-![screen shot 2016-02-15 at 15 36 39](https://cloud.githubusercontent.com/assets/1314694/13053030/315e5952-d3fa-11e5-8d13-a61ccb135a49.png)
+``` php
+Graze\TelnetClient\TelnetResponse {#2
+  #isError: false
+  #responseText: "Affirmative, Dave"
+  #promptMatches: array:1 [
+    0 => "$"
+  ]
+}
+```
 
 Or if the server responded with an error:
 
-![screen shot 2016-02-15 at 15 37 55](https://cloud.githubusercontent.com/assets/1314694/13053054/400869ac-d3fa-11e5-8bc2-2c0335eaecde.png)
+``` php
+Graze\TelnetClient\TelnetResponse {#2
+  #isError: true
+  #responseText: " I'm sorry, Dave. I'm afraid I can't do that"
+  #promptMatches: array:1 [
+    0 => "ERROR"
+  ]
+}
+```
 
 **Note:** `responseText` and `promptMatches` are trimmed of line endings.
 
@@ -120,7 +136,15 @@ $client->connect($dsn, null, $promptError);
 
 An error response would look like:
 
-![screen shot 2016-02-15 at 15 51 16](https://cloud.githubusercontent.com/assets/1314694/13053378/1d929210-d3fc-11e5-9479-25cfcfc50fec.png)
+``` php
+Graze\TelnetClient\TelnetResponse {#2
+  #isError: true
+  #responseText: "unknown command"
+  #promptMatches: array:1 [
+    0 => "ERROR 6"
+  ]
+}
+```
 
 We can take the regex one further by using a [named capturing group](http://www.regular-expressions.info/named.html), this makes the error code easily available to us in the `$promptMatches` array.
 
@@ -132,7 +156,17 @@ $client->connect($dsn, null, $promptError);
 
 which gives us:
 
-![screen shot 2016-02-15 at 15 57 29](https://cloud.githubusercontent.com/assets/1314694/13053525/e04e8656-d3fc-11e5-873a-0d5df92701ae.png)
+``` php
+Graze\TelnetClient\TelnetResponse {#2
+  #isError: true
+  #responseText: "unknown command"
+  #promptMatches: array:3 [
+    0 => "ERROR 6",
+    "errorNum" => "6",
+    1 => "6"
+  ]
+}
+```
 
 **Note:** it's important to escape any characters in your regex that may have special meaning when interpreted by [preg_match](http://php.net/manual/en/function.preg-match.php).
 
@@ -162,7 +196,7 @@ Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
 ## Security
 
-If you discover any security related issues, please email <security@graze.com> instead of using the issue tracker.
+If you discover any security related issues, please email security@graze.com instead of using the issue tracker.
 
 ## Inspired by
 
