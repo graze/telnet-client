@@ -14,6 +14,8 @@
 
 namespace Graze\TelnetClient;
 
+use Socket\Raw\Socket;
+
 interface TelnetClientInterface
 {
     /**
@@ -28,12 +30,12 @@ interface TelnetClientInterface
      * @param string $command
      * @param string $prompt
      *
-     * @return \Graze\TelnetClient\TelnetResponseInterface
+     * @return TelnetResponseInterface
      */
     public function execute($command, $prompt = null);
 
     /**
-     * @return \Socket\Raw\Socket
+     * @return Socket
      */
     public function getSocket();
 }

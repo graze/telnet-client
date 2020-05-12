@@ -3,8 +3,9 @@
 namespace Graze\TelnetClient\Test\Unit;
 
 use Graze\TelnetClient\PromptMatcher;
+use PHPUnit_Framework_TestCase;
 
-class PromptMatcherTest extends \PHPUnit_Framework_TestCase
+class PromptMatcherTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @dataProvider dataProviderIsMatch

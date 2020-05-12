@@ -2,16 +2,18 @@
 
 namespace Graze\TelnetClient\Test\Unit;
 
+use Exception;
 use Graze\TelnetClient\Exception\TelnetExceptionInterface;
 use Graze\TelnetClient\InterpretAsCommand;
 use Graze\TelnetClient\PromptMatcher;
 use Graze\TelnetClient\TelnetClient;
 use Graze\TelnetClient\TelnetResponseInterface;
 use Mockery as m;
+use PHPUnit_Framework_TestCase;
 use Socket\Raw\Factory as SocketFactory;
 use Socket\Raw\Socket;
 
-class TelnetClientTest extends \PHPUnit_Framework_TestCase
+class TelnetClientTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @dataProvider dataProviderConnect
@@ -255,7 +257,7 @@ class TelnetClientTest extends \PHPUnit_Framework_TestCase
 
         $socket = m::mock(Socket::class)
             ->shouldReceive('write')
-            ->andThrow(\Exception::class)
+            ->andThrow(Exception::class)
             ->shouldReceive('close')
             ->getMock();
 
@@ -273,7 +275,7 @@ class TelnetClientTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('write')
             ->shouldReceive('close')
             ->shouldReceive('read')
-            ->andThrow(\Exception::class)
+            ->andThrow(Exception::class)
             ->getMock();
 
         $client->setSocket($socket);
