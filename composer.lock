@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "11108e5cc1813abb77c0bb7fd6200ad8",
+    "content-hash": "5f14999d78f7b4f246245388b8fc8b54",
     "packages": [
         {
             "name": "clue/socket-raw",
@@ -902,6 +902,7 @@
                 "mock",
                 "xunit"
             ],
+            "abandoned": true,
             "time": "2017-06-30T09:13:00+00:00"
         },
         {
