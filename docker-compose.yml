@@ -2,10 +2,10 @@ version: '3'
 
 services:
   composer:
-    image: graze/composer
+    image: composer
     volumes:
-      - .:/usr/src/app
-      - ~/.composer:/home/composer/.composer
+      - .:/app
+      - ~/.composer:/tmp
 
   php:
     image: graze/php-alpine:5-test
