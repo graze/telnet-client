@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b8d3a486f9ec52e968239f298b00e1ab",
+    "content-hash": "5f14999d78f7b4f246245388b8fc8b54",
     "packages": [
         {
             "name": "clue/socket-raw",
@@ -902,6 +902,7 @@
                 "mock",
                 "xunit"
             ],
+            "abandoned": true,
             "time": "2017-06-30T09:13:00+00:00"
         },
         {
@@ -1778,5 +1779,6 @@
         "ext-xmlwriter": "1.0",
         "ext-sockets": "1.0",
         "php": "5.6"
-    }
+    },
+    "plugin-api-version": "1.1.0"
 }
