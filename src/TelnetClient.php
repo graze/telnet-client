@@ -168,6 +168,21 @@ class TelnetClient implements TelnetClientInterface
     }
 
     /**
+     * @param float $timeout
+     */
+    public function setReadTimeout($timeout)
+    {
+        if (!$this->socket) {
+            throw new TelnetException('cannot set read timeout, socket does not exist (call connect() first)');
+        }
+
+        $sec = floor($timeout);
+        $usec = round(fmod($timeout, 1) * 1000000);
+
+        $this->socket->setOption(SOL_SOCKET, SO_RCVTIMEO, ['sec' => $sec, 'usec' => $usec]);
+    }
+
+    /**
      * @param string $command
      * @param string $prompt
      * @param string $promptError
