@@ -291,4 +291,46 @@ class TelnetClientTest extends PHPUnit_Framework_TestCase
         $client = TelnetClient::factory();
         $this->assertInstanceOf(TelnetClient::class, $client);
     }
+
+    /**
+     * @dataProvider setReadTimeoutDataProvider
+     * @param float $timeout
+     * @param int $expectedSec
+     * @param int $expectedUsec
+     */
+    public function testSetReadTimeout($timeout, $expectedSec, $expectedUsec)
+    {
+        $client = m::mock(TelnetClient::class)->makePartial();
+
+        $socket = m::mock(Socket::class)
+            ->shouldReceive('setOption')
+            ->with(SOL_SOCKET, SO_RCVTIMEO, ['sec' => $expectedSec, 'usec' => $expectedUsec])
+            ->shouldReceive('close')
+            ->getMock();
+
+        $client->setSocket($socket);
+
+        $client->setReadTimeout($timeout);
+    }
+
+    /**
+     * @return mixed[]
+     */
+    public function setReadTimeoutDataProvider()
+    {
+        return [
+            [1, 1, 0],
+            [0.5, 0, 500000],
+            [2.345, 2, 345000],
+        ];
+    }
+
+    public function testSetReadTimeoutException()
+    {
+        $this->setExpectedException(TelnetExceptionInterface::class);
+
+        $client = m::mock(TelnetClient::class)->makePartial();
+
+        $client->setReadTimeout(1);
+    }
 }
