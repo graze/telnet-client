@@ -55,7 +55,7 @@ class TelnetClient implements TelnetClientInterface
     /**
      * @var int
      */
-    protected $maxReadCharacters = 0;
+    protected $maxReadBytes = 0;
 
     /**
      * @var Socket
@@ -157,13 +157,13 @@ class TelnetClient implements TelnetClientInterface
     }
 
     /**
-     * Set the maximum number of characters that can be read per request
+     * Set the maximum number of bytes that can be read per request
      *
-     * @param int $maxReadCharacters
+     * @param int $maxReadBytes
      */
-    public function setMaxReadCharacters($maxReadCharacters)
+    public function setMaxReadBytes($maxReadBytes)
     {
-        $this->maxReadCharacters = $maxReadCharacters;
+        $this->maxReadBytes = $maxReadBytes;
     }
 
     /**
@@ -226,22 +226,22 @@ class TelnetClient implements TelnetClientInterface
         $isError = false;
         $buffer = '';
         do {
-            // process one character at a time
+            // process one byte at a time
             try {
-                $character = $this->socket->read(1);
+                $byte = $this->socket->read(1);
             } catch (Exception $e) {
                 throw new TelnetException('failed reading from socket', 0, $e);
             }
 
-            if (in_array($character, [$this->NULL, $this->DC1])) {
+            if (in_array($byte, [$this->NULL, $this->DC1])) {
                 break;
             }
 
-            if ($this->interpretAsCommand->interpret($character, $this->socket)) {
+            if ($this->interpretAsCommand->interpret($byte, $this->socket)) {
                 continue;
             }
 
-            $buffer .= $character;
+            $buffer .= $byte;
 
             // check for prompt
             if ($this->promptMatcher->isMatch($prompt ?: $this->prompt, $buffer, $this->lineEnding)) {
@@ -254,11 +254,11 @@ class TelnetClient implements TelnetClientInterface
                 break;
             }
 
-            // throw an exception if the number of characters read is greater than the limit
-            if ($this->maxReadCharacters > 0 && strlen($buffer) >= $this->maxReadCharacters) {
+            // throw an exception if the number of bytes read is greater than the limit
+            if ($this->maxReadBytes > 0 && strlen($buffer) >= $this->maxReadBytes) {
                 throw new TelnetException(sprintf(
-                    'Maximum number of characters read (%d), the last characters were %s',
-                    $this->maxReadCharacters,
+                    'Maximum number of bytes read (%d), the last bytes were %s',
+                    $this->maxReadBytes,
                     substr($buffer, -10)
                 ));
             }

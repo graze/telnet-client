@@ -122,7 +122,7 @@ class TelnetClientTest extends PHPUnit_Framework_TestCase
             ->with($command.$lineEnding)
             ->once();
 
-        // echo the command back when reading each character one-by-one from the socket
+        // echo the command back when reading each byte one-by-one from the socket
         $commandResponse = str_split($command.$lineEnding.$promptResponse.$lineEnding);
         $socket = $socket
             ->shouldReceive('read')
@@ -190,7 +190,7 @@ class TelnetClientTest extends PHPUnit_Framework_TestCase
             ->with($command.$lineEnding)
             ->once();
 
-        // echo the command back when reading each character one-by-one from the socket
+        // echo the command back when reading each byte one-by-one from the socket
         $commandResponse = str_split($command.$lineEnding.$promptResponse.$lineEnding);
         $socket = $socket
             ->shouldReceive('read')
@@ -286,11 +286,11 @@ class TelnetClientTest extends PHPUnit_Framework_TestCase
         $client->execute('aCommand');
     }
 
-    public function testMaxReadCharactersException()
+    public function testMaxReadBytesException()
     {
         $this->setExpectedException(
             TelnetExceptionInterface::class, 
-            'Maximum number of characters read (20), the last characters were 0123456789'
+            'Maximum number of bytes read (20), the last bytes were 0123456789'
         );
 
         $socket = m::mock(Socket::class)
@@ -316,7 +316,7 @@ class TelnetClientTest extends PHPUnit_Framework_TestCase
 
         $client = new TelnetClient($socketFactory, $promptMatcher, $interpretAsCommand);
         $client->connect('dsn');
-        $client->setMaxReadCharacters(20);
+        $client->setMaxReadBytes(20);
 
         $client->execute('aCommand');
     }
