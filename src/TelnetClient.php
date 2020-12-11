@@ -55,7 +55,7 @@ class TelnetClient implements TelnetClientInterface
     /**
      * @var int
      */
-    protected $maxReadBytes = 0;
+    protected $maxBytesRead = 0;
 
     /**
      * @var Socket
@@ -159,11 +159,11 @@ class TelnetClient implements TelnetClientInterface
     /**
      * Set the maximum number of bytes that can be read per request
      *
-     * @param int $maxReadBytes
+     * @param int $maxBytesRead
      */
-    public function setMaxReadBytes($maxReadBytes)
+    public function setMaxBytesRead($maxBytesRead)
     {
-        $this->maxReadBytes = $maxReadBytes;
+        $this->maxBytesRead = $maxBytesRead;
     }
 
     /**
@@ -225,10 +225,12 @@ class TelnetClient implements TelnetClientInterface
     {
         $isError = false;
         $buffer = '';
+        $bytesRead = 0;
         do {
             // process one byte at a time
             try {
                 $byte = $this->socket->read(1);
+                $bytesRead++;
             } catch (Exception $e) {
                 throw new TelnetException('failed reading from socket', 0, $e);
             }
@@ -255,10 +257,10 @@ class TelnetClient implements TelnetClientInterface
             }
 
             // throw an exception if the number of bytes read is greater than the limit
-            if ($this->maxReadBytes > 0 && strlen($buffer) >= $this->maxReadBytes) {
+            if ($this->maxBytesRead > 0 && $bytesRead >= $this->maxBytesRead) {
                 throw new TelnetException(sprintf(
                     'Maximum number of bytes read (%d), the last bytes were %s',
-                    $this->maxReadBytes,
+                    $this->maxBytesRead,
                     substr($buffer, -10)
                 ));
             }

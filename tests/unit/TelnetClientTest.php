@@ -286,7 +286,7 @@ class TelnetClientTest extends PHPUnit_Framework_TestCase
         $client->execute('aCommand');
     }
 
-    public function testMaxReadBytesException()
+    public function testMaxBytesReadException()
     {
         $this->setExpectedException(
             TelnetExceptionInterface::class, 
@@ -316,7 +316,7 @@ class TelnetClientTest extends PHPUnit_Framework_TestCase
 
         $client = new TelnetClient($socketFactory, $promptMatcher, $interpretAsCommand);
         $client->connect('dsn');
-        $client->setMaxReadBytes(20);
+        $client->setMaxBytesRead(20);
 
         $client->execute('aCommand');
     }
