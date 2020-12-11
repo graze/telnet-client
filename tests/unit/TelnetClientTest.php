@@ -122,7 +122,7 @@ class TelnetClientTest extends PHPUnit_Framework_TestCase
             ->with($command.$lineEnding)
             ->once();
 
-        // echo the command back when reading each character one-by-one from the socket
+        // echo the command back when reading each byte one-by-one from the socket
         $commandResponse = str_split($command.$lineEnding.$promptResponse.$lineEnding);
         $socket = $socket
             ->shouldReceive('read')
@@ -190,7 +190,7 @@ class TelnetClientTest extends PHPUnit_Framework_TestCase
             ->with($command.$lineEnding)
             ->once();
 
-        // echo the command back when reading each character one-by-one from the socket
+        // echo the command back when reading each byte one-by-one from the socket
         $commandResponse = str_split($command.$lineEnding.$promptResponse.$lineEnding);
         $socket = $socket
             ->shouldReceive('read')
@@ -271,7 +271,7 @@ class TelnetClientTest extends PHPUnit_Framework_TestCase
 
     public function testReadException()
     {
-        $this->setExpectedException(TelnetExceptionInterface::class);
+        $this->setExpectedException(TelnetExceptionInterface::class, 'failed reading from socket');
 
         $client = m::mock(TelnetClient::class)->makePartial();
 
@@ -283,6 +283,41 @@ class TelnetClientTest extends PHPUnit_Framework_TestCase
             ->getMock();
 
         $client->setSocket($socket);
+        $client->execute('aCommand');
+    }
+
+    public function testMaxBytesReadException()
+    {
+        $this->setExpectedException(
+            TelnetExceptionInterface::class, 
+            'Maximum number of bytes read (20), the last bytes were 0123456789'
+        );
+
+        $socket = m::mock(Socket::class)
+            ->shouldReceive('write')
+            ->shouldReceive('close')
+            ->shouldReceive('read');
+
+        call_user_func_array([$socket, 'andReturn'], str_split('0123456789012345678912'));
+        $socket = $socket->getMock();
+
+        $socketFactory = m::mock(SocketFactory::class)
+            ->shouldReceive('createClient')
+            ->andReturn($socket)
+            ->once()
+            ->getMock();
+
+        $promptMatcher = new PromptMatcher();
+
+        $interpretAsCommand = m::mock(InterpretAsCommand::class)
+            ->shouldReceive('interpret')
+            ->andReturn(false)
+            ->getMock();
+
+        $client = new TelnetClient($socketFactory, $promptMatcher, $interpretAsCommand);
+        $client->connect('dsn');
+        $client->setMaxBytesRead(20);
+
         $client->execute('aCommand');
     }
 
