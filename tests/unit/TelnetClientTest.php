@@ -271,7 +271,7 @@ class TelnetClientTest extends PHPUnit_Framework_TestCase
 
     public function testReadException()
     {
-        $this->setExpectedException(TelnetExceptionInterface::class);
+        $this->setExpectedException(TelnetExceptionInterface::class, 'failed reading from socket');
 
         $client = m::mock(TelnetClient::class)->makePartial();
 
@@ -283,6 +283,41 @@ class TelnetClientTest extends PHPUnit_Framework_TestCase
             ->getMock();
 
         $client->setSocket($socket);
+        $client->execute('aCommand');
+    }
+
+    public function testMaxReadCharactersException()
+    {
+        $this->setExpectedException(
+            TelnetExceptionInterface::class, 
+            'Maximum number of characters read (20), the last characters were 0123456789'
+        );
+
+        $socket = m::mock(Socket::class)
+            ->shouldReceive('write')
+            ->shouldReceive('close')
+            ->shouldReceive('read');
+
+        call_user_func_array([$socket, 'andReturn'], str_split('0123456789012345678912'));
+        $socket = $socket->getMock();
+
+        $socketFactory = m::mock(SocketFactory::class)
+            ->shouldReceive('createClient')
+            ->andReturn($socket)
+            ->once()
+            ->getMock();
+
+        $promptMatcher = new PromptMatcher();
+
+        $interpretAsCommand = m::mock(InterpretAsCommand::class)
+            ->shouldReceive('interpret')
+            ->andReturn(false)
+            ->getMock();
+
+        $client = new TelnetClient($socketFactory, $promptMatcher, $interpretAsCommand);
+        $client->connect('dsn');
+        $client->setMaxReadCharacters(20);
+
         $client->execute('aCommand');
     }
 

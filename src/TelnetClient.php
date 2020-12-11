@@ -53,6 +53,11 @@ class TelnetClient implements TelnetClientInterface
     protected $lineEnding = "\n";
 
     /**
+     * @var int
+     */
+    protected $maxReadCharacters = 0;
+
+    /**
      * @var Socket
      */
     protected $socket;
@@ -152,6 +157,16 @@ class TelnetClient implements TelnetClientInterface
     }
 
     /**
+     * Set the maximum number of characters that can be read per request
+     *
+     * @param int $maxReadCharacters
+     */
+    public function setMaxReadCharacters($maxReadCharacters)
+    {
+        $this->maxReadCharacters = $maxReadCharacters;
+    }
+
+    /**
      * @param Socket $socket
      */
     public function setSocket(Socket $socket)
@@ -237,6 +252,15 @@ class TelnetClient implements TelnetClientInterface
             if ($this->promptMatcher->isMatch($promptError ?: $this->promptError, $buffer, $this->lineEnding)) {
                 $isError = true;
                 break;
+            }
+
+            // throw an exception if the number of characters read is greater than the limit
+            if ($this->maxReadCharacters > 0 && strlen($buffer) >= $this->maxReadCharacters) {
+                throw new TelnetException(sprintf(
+                    'Maximum number of characters read (%d), the last characters were %s',
+                    $this->maxReadCharacters,
+                    substr($buffer, -10)
+                ));
             }
         } while (true);
 
